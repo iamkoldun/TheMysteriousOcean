@@ -22,6 +22,22 @@ public class PlayerInventory : MonoBehaviour
     private Item _leftHeldItem;
 
     public Inventory Inventory => _inventory;
+    public Transform InventoryStash => inventoryStash;
+
+    /// <summary>Hide item in stash (e.g. while dragging in inventory UI).</summary>
+    public void PutAwayItem(Item item)
+    {
+        if (item != null && inventoryStash != null) item.PutAway(inventoryStash);
+    }
+
+    /// <summary>Drop item into the world at drop position (e.g. when dropping outside inventory UI).</summary>
+    public void DropItemInWorld(Item item)
+    {
+        if (item == null) return;
+        Vector3 pos = transform.position + transform.forward * dropDistance;
+        pos.y = transform.position.y + dropHeight;
+        item.Drop(pos, transform.rotation);
+    }
 
     private void Awake()
     {

@@ -670,6 +670,93 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
+    /// <summary>
+    /// Remove item from a display slot (hand or expansion). Does not move the Item GameObject; caller handles PutAway/Drop.
+    /// For second-half slot of heavy item, use the main hand slot (displayIndex 0). Returns null if slot empty or invalid.
+    /// </summary>
+    public Item RemoveItemFromDisplaySlot(int displayIndex)
+    {
+        if (displayIndex < 0) return null;
+        if (displayIndex < HandSlotCount)
+        {
+            if (displayIndex == LeftHand && IsDisplaySlotSecondHalf(LeftHand))
+                return null;
+            if (IsHoldingHeavy())
+            {
+                if (displayIndex != RightHand) return null;
+                Item item = _handSlots[RightHand].item;
+                ClearBothHandsRaw();
+                NotifyChanged();
+                return item;
+            }
+            var slot = _handSlots[displayIndex];
+            if (!slot.hasItem || slot.item == null) return null;
+            Item handItem = slot.item;
+            _handSlots[displayIndex] = new InventorySlotState { index = displayIndex };
+            NotifyChanged();
+            return handItem;
+        }
+        if (!ResolveExpansionIndex(displayIndex, out int ei, out int si)) return null;
+        var exp = _expansions[ei];
+        var s = exp.slots[si];
+        if (s.isSecondHalf)
+        {
+            si = s.startIndex;
+            s = exp.slots[si];
+        }
+        if (!s.hasItem || s.item == null) return null;
+        Item expItem = s.item;
+        int count = s.slotCount;
+        ClearExpansionSlotRaw(exp, si, count);
+        NotifyChanged();
+        return expItem;
+    }
+
+    /// <summary>
+    /// Place item into a display slot. Hands must be free for hand slot; expansion slot(s) must be free. Returns false if cannot place.
+    /// </summary>
+    public bool TryPlaceItemInDisplaySlot(int displayIndex, Item item)
+    {
+        if (item == null || displayIndex < 0) return false;
+        if (displayIndex < HandSlotCount)
+        {
+            if (item.SlotCount == 1)
+            {
+                var slot = _handSlots[displayIndex];
+                if (slot.hasItem || slot.isSecondHalf) return false;
+                SetHandItem(displayIndex, item);
+                return true;
+            }
+            if (item.SlotCount == 2)
+            {
+                if (GetRightHandItem() != null || GetLeftHandItem() != null) return false;
+                SetBothHandsItem(item);
+                return true;
+            }
+            return false;
+        }
+        if (!ResolveExpansionIndex(displayIndex, out int ei, out int si)) return false;
+        var exp = _expansions[ei];
+        if (si < 0 || si >= exp.slots.Count) return false;
+        int needSlots = item.SlotCount;
+        if (needSlots > 1 && exp.slots[si].isSecondHalf) return false;
+        for (int i = 0; i < needSlots; i++)
+        {
+            int idx = si + i;
+            if (idx >= exp.slots.Count) return false;
+            var s = exp.slots[idx];
+            if (s.hasItem || s.isSecondHalf) return false;
+        }
+        if (needSlots == 1)
+        {
+            SetExpansionSlot(ei, si, item);
+            return true;
+        }
+        PlaceItemInExpansionRaw(exp, si, item);
+        NotifyChanged();
+        return true;
+    }
+
     // ── Internal raw operations (no NotifyChanged) ──
 
     private void ClearBothHandsRaw()

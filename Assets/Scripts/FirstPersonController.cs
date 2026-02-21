@@ -68,15 +68,15 @@ public class FirstPersonController : MonoBehaviour
         // Move the character
         controller.Move(velocity * Time.deltaTime);
         
-        // Unlock cursor with Escape
-        if (Input.GetKeyDown(KeyCode.Escape))
+        // Unlock cursor with Escape (only when inventory is not open — inventory handles Esc to close)
+        if (Input.GetKeyDown(KeyCode.Escape) && !InventoryScreenUI.IsOpen)
         {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
         
-        // Lock cursor on click
-        if (Input.GetMouseButtonDown(0) && Cursor.lockState == CursorLockMode.None)
+        // Lock cursor on click (not when inventory is open — inventory needs free cursor)
+        if (Input.GetMouseButtonDown(0) && Cursor.lockState == CursorLockMode.None && !InventoryScreenUI.IsOpen)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
