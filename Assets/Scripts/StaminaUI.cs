@@ -65,7 +65,7 @@ public class StaminaUI : MonoBehaviour
             rt.anchorMin = new Vector2(0f, 0f);
             rt.anchorMax = new Vector2(0f, 0f);
             rt.pivot = new Vector2(0f, 0f);
-            rt.anchoredPosition = new Vector2(20f, 94f);
+            rt.anchoredPosition = new Vector2(20f, 120f);
             rt.sizeDelta = new Vector2(200f, 14f);
         }
     }

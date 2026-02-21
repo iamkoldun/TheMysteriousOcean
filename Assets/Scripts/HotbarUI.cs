@@ -3,131 +3,260 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 /// <summary>
-/// Shows hotbar slots (left-bottom). If slotUIPrefab is set, spawns that prefab per slot; otherwise uses existing children.
+/// Shows hotbar as sections: [Hands] [Expansion1] [Expansion2] ...
+/// Each section has its own background and can use custom Slot/WideSlot prefabs.
 /// </summary>
 public class HotbarUI : MonoBehaviour
 {
     [SerializeField] private Inventory inventory;
-    [SerializeField] private GameObject slotUIPrefab;
-    [SerializeField] private HotbarSlotUI[] slotUIs;
-    [SerializeField] private Color normalColor = new Color(0.2f, 0.2f, 0.2f, 0.8f);
-    [SerializeField] private Color activeColor = new Color(0.4f, 0.6f, 0.9f, 1f);
+    [SerializeField] private GameObject handsSectionPrefab;
+    [SerializeField] private GameObject expansionSectionPrefab;
 
-    private List<GameObject> _spawnedSlots = new List<GameObject>();
+    private readonly List<HotbarSectionUI> _sections = new List<HotbarSectionUI>();
+    private readonly List<GameObject> _spawnedSections = new List<GameObject>();
+    private HotbarSlotUI[] slotUIs;
+    private int _lastSlotCount;
+    private bool[] _lastWidePattern;
+
+    private const float SectionGap = 12f;
+    private const float PanelPaddingX = 20f;
+    private const float PanelPaddingY = 20f;
 
     private void Awake()
     {
         if (inventory == null) inventory = FindFirstObjectByType<Inventory>();
-
-        if (slotUIPrefab != null)
-        {
-            foreach (var slot in GetComponentsInChildren<HotbarSlotUI>(true))
-            {
-                if (slot.transform != transform)
-                    Destroy(slot.gameObject);
-            }
-            _spawnedSlots.Clear();
-            for (int i = 0; i < Inventory.HotbarSlotCount; i++)
-            {
-                var go = Instantiate(slotUIPrefab, transform);
-                go.name = "Slot" + i;
-                _spawnedSlots.Add(go);
-            }
-            slotUIs = GetComponentsInChildren<HotbarSlotUI>(true);
-        }
-        else if (slotUIs == null || slotUIs.Length == 0)
-        {
-            slotUIs = GetComponentsInChildren<HotbarSlotUI>(true);
-        }
-
-        var rt = transform as RectTransform;
-        if (rt != null)
-        {
-            rt.anchorMin = new Vector2(0f, 0f);
-            rt.anchorMax = new Vector2(0f, 0f);
-            rt.pivot = new Vector2(0f, 0f);
-            rt.anchoredPosition = new Vector2(20f, 20f);
-            rt.sizeDelta = new Vector2(320f, 70f);
-        }
-        LayoutSlots();
-    }
-
-    private void OnDestroy()
-    {
-        foreach (var go in _spawnedSlots)
-        {
-            if (go != null) Destroy(go);
-        }
-    }
-
-    private const float SlotW = 70f;
-    private const float Gap = 8f;
-    private const float StartX = 4f;
-
-    private void LayoutSlots()
-    {
-        if (slotUIs == null || slotUIs.Length == 0 || inventory == null) return;
-        float x = StartX;
-        for (int i = 0; i < slotUIs.Length; i++)
-        {
-            var slotRt = slotUIs[i].transform as RectTransform;
-            if (slotRt == null) continue;
-            slotRt.anchorMin = new Vector2(0f, 0f);
-            slotRt.anchorMax = new Vector2(0f, 1f);
-            slotRt.pivot = new Vector2(0f, 0.5f);
-            bool isSecondHalf = inventory.IsSlotOccupiedByPreviousHalf(i);
-            var slot = inventory.GetSlot(i);
-            float w = slotW(i);
-            slotRt.anchoredPosition = new Vector2(x, 0f);
-            slotRt.sizeDelta = new Vector2(w, -8f);
-            slotUIs[i].SetMerged(w > SlotW);
-            x += w + Gap;
-        }
-    }
-
-    private float slotW(int index)
-    {
-        if (inventory.IsSlotOccupiedByPreviousHalf(index)) return 0f;
-        var slot = inventory.GetSlot(index);
-        if (slot.hasItem && slot.slotCount == 2) return SlotW * 2f + Gap;
-        return SlotW;
     }
 
     private void OnEnable()
     {
         if (inventory != null)
-        {
-            inventory.OnSlotChanged += RefreshAll;
-            inventory.OnActiveHotbarChanged += OnActiveChanged;
-        }
-        RefreshAll(0);
+            inventory.OnInventoryChanged += Refresh;
+        RebuildSlots();
     }
 
     private void OnDisable()
     {
         if (inventory != null)
+            inventory.OnInventoryChanged -= Refresh;
+    }
+
+    private void Start()
+    {
+        Refresh();
+    }
+
+    private void RebuildSlots()
+    {
+        if (inventory == null) return;
+
+        int count = inventory.GetDisplaySlotCount();
+        bool[] widePattern = GetWideSlotPattern(count);
+        bool patternChanged = _lastWidePattern == null || _lastWidePattern.Length != count;
+        if (!patternChanged)
         {
-            inventory.OnSlotChanged -= RefreshAll;
-            inventory.OnActiveHotbarChanged -= OnActiveChanged;
+            for (int i = 0; i < count; i++)
+            {
+                if (_lastWidePattern[i] != widePattern[i]) { patternChanged = true; break; }
+            }
+        }
+        if (slotUIs != null && slotUIs.Length == count && count == _lastSlotCount && !patternChanged)
+            return;
+
+        foreach (var go in _spawnedSections)
+        {
+            if (go != null) Destroy(go);
+        }
+        _spawnedSections.Clear();
+        _sections.Clear();
+
+        GameObject handsPrefab = handsSectionPrefab != null ? handsSectionPrefab : expansionSectionPrefab;
+        GameObject expPrefab = expansionSectionPrefab != null ? expansionSectionPrefab : handsPrefab;
+        if (handsPrefab == null) return;
+
+        int displayIndex = 0;
+        // Hands section
+        int handsCount = Inventory.HandSlotCount;
+        if (handsCount > 0 && displayIndex < count)
+        {
+            int sectionSlots = Mathf.Min(handsCount, count - displayIndex);
+            bool[] sectionWide = SlicePattern(widePattern, displayIndex, sectionSlots);
+            var sectionGo = Instantiate(handsPrefab, transform);
+            sectionGo.name = "Section_Hands";
+            _spawnedSections.Add(sectionGo);
+            var section = sectionGo.GetComponent<HotbarSectionUI>();
+            if (section != null)
+            {
+                section.BuildSlots(sectionSlots, sectionWide);
+                _sections.Add(section);
+            }
+            displayIndex += sectionSlots;
+        }
+
+        // Expansion sections — each expansion can use its own sectionUIPrefab from Inventory
+        for (int e = 0; e < inventory.Expansions.Count; e++)
+        {
+            var expansion = inventory.Expansions[e];
+            int expSlots = expansion.slotCount;
+            if (displayIndex >= count) break;
+            int sectionSlots = Mathf.Min(expSlots, count - displayIndex);
+            bool[] sectionWide = SlicePattern(widePattern, displayIndex, sectionSlots);
+            GameObject prefabToUse = expansion.sectionUIPrefab != null ? expansion.sectionUIPrefab : expPrefab;
+            if (prefabToUse == null) prefabToUse = handsPrefab;
+            var sectionGo = Instantiate(prefabToUse, transform);
+            sectionGo.name = "Section_" + (expansion.name ?? ("Expansion" + e));
+            _spawnedSections.Add(sectionGo);
+            var section = sectionGo.GetComponent<HotbarSectionUI>();
+            if (section != null)
+            {
+                section.BuildSlots(sectionSlots, sectionWide);
+                _sections.Add(section);
+            }
+            displayIndex += sectionSlots;
+        }
+
+        var slotList = new List<HotbarSlotUI>();
+        foreach (var s in _sections)
+        {
+            var uis = s.GetSlotUIs();
+            if (uis != null) slotList.AddRange(uis);
+        }
+        slotUIs = slotList.ToArray();
+        _lastSlotCount = count;
+        _lastWidePattern = widePattern;
+
+        LayoutSections();
+        RefreshSlots();
+    }
+
+    private static bool[] SlicePattern(bool[] full, int start, int length)
+    {
+        if (full == null || start >= full.Length) return null;
+        var slice = new bool[length];
+        for (int i = 0; i < length && start + i < full.Length; i++)
+            slice[i] = full[start + i];
+        return slice;
+    }
+
+    private void LayoutSections()
+    {
+        if (inventory == null || _sections.Count == 0) return;
+        var panelRt = transform as RectTransform;
+        if (panelRt == null) return;
+
+        panelRt.anchorMin = new Vector2(0f, 0f);
+        panelRt.anchorMax = new Vector2(0f, 0f);
+        panelRt.pivot = new Vector2(0f, 0f);
+        panelRt.anchoredPosition = new Vector2(PanelPaddingX, PanelPaddingY);
+
+        int displayIndex = 0;
+        float x = 0f;
+        float maxH = 0f;
+        int count = inventory.GetDisplaySlotCount();
+        bool[] widePattern = GetWideSlotPattern(count);
+
+        for (int s = 0; s < _sections.Count; s++)
+        {
+            int sectionSlotCount = 0;
+            if (s == 0)
+            {
+                sectionSlotCount = Mathf.Min(Inventory.HandSlotCount, count);
+            }
+            else
+            {
+                int expIdx = s - 1;
+                sectionSlotCount = expIdx < inventory.Expansions.Count ? inventory.Expansions[expIdx].slotCount : 0;
+                sectionSlotCount = Mathf.Min(sectionSlotCount, count - displayIndex);
+            }
+            bool[] sectionWide = SlicePattern(widePattern, displayIndex, sectionSlotCount);
+            displayIndex += sectionSlotCount;
+
+            var section = _sections[s];
+            float sectionWidth = section.GetPreferredWidth(sectionSlotCount, sectionWide);
+            float sectionHeight = 90f;
+            if (sectionHeight > maxH) maxH = sectionHeight;
+
+            var sectionRt = section.transform as RectTransform;
+            if (sectionRt != null)
+            {
+                sectionRt.anchorMin = new Vector2(0f, 0f);
+                sectionRt.anchorMax = new Vector2(0f, 0f);
+                sectionRt.pivot = new Vector2(0f, 0f);
+                sectionRt.anchoredPosition = new Vector2(x, 0f);
+                sectionRt.sizeDelta = new Vector2(sectionWidth, sectionHeight);
+            }
+            section.LayoutSlots(sectionSlotCount, sectionWide);
+            x += sectionWidth + SectionGap;
+        }
+        if (x > 0f) x -= SectionGap;
+        panelRt.sizeDelta = new Vector2(x, maxH);
+    }
+
+    private bool[] GetWideSlotPattern(int count)
+    {
+        var pattern = new bool[count];
+        for (int i = 0; i < count; i++)
+        {
+            if (inventory.IsDisplaySlotSecondHalf(i)) continue;
+            var slot = inventory.GetDisplaySlot(i);
+            pattern[i] = slot.hasItem && slot.slotCount == 2;
+        }
+        return pattern;
+    }
+
+    private void Refresh()
+    {
+        int needed = inventory.GetDisplaySlotCount();
+        bool[] pattern = GetWideSlotPattern(needed);
+        bool patternChanged = _lastWidePattern == null || _lastWidePattern.Length != needed;
+        if (!patternChanged && _lastWidePattern != null)
+        {
+            for (int i = 0; i < needed && i < _lastWidePattern.Length; i++)
+            {
+                if (_lastWidePattern[i] != pattern[i]) { patternChanged = true; break; }
+            }
+        }
+        if (slotUIs == null || slotUIs.Length != needed || patternChanged)
+        {
+            RebuildSlots();
+            return;
+        }
+        LayoutSections();
+        RefreshSlots();
+    }
+
+    private static string GetKeyLabelForDisplayIndex(int displayIndex)
+    {
+        if (displayIndex == Inventory.RightHand) return "RMB";
+        if (displayIndex == Inventory.LeftHand) return "LMB";
+        return (displayIndex - Inventory.HandSlotCount + 1).ToString();
+    }
+
+    private void RefreshSlots()
+    {
+        if (inventory == null || slotUIs == null) return;
+        int displayCount = inventory.GetDisplaySlotCount();
+        for (int i = 0; i < slotUIs.Length && i < displayCount; i++)
+        {
+            bool isContinuation = inventory.IsDisplaySlotSecondHalf(i);
+            slotUIs[i].SetKeyLabel(isContinuation ? "" : GetKeyLabelForDisplayIndex(i));
+
+            var slot = inventory.GetDisplaySlot(i);
+            slotUIs[i].SetSlot(slot, isContinuation);
+
+            bool selected = false;
+            if (i == Inventory.RightHand)
+                selected = true;
+            else if (i == Inventory.LeftHand && inventory.IsHoldingHeavy())
+                selected = true;
+            slotUIs[i].SetSelected(selected);
         }
     }
 
-    private void OnActiveChanged(int index)
+    private void OnDestroy()
     {
-        for (int i = 0; i < Inventory.HotbarSlotCount && i < slotUIs.Length; i++)
-            slotUIs[i].SetSelected(i == index);
-    }
-
-    private void RefreshAll(int _)
-    {
-        if (inventory == null) return;
-        LayoutSlots();
-        for (int i = 0; i < Inventory.HotbarSlotCount && i < slotUIs.Length; i++)
+        foreach (var go in _spawnedSections)
         {
-            var slot = inventory.GetSlot(i);
-            bool isContinuation = inventory.IsSlotOccupiedByPreviousHalf(i);
-            slotUIs[i].SetSlot(slot, isContinuation);
-            slotUIs[i].SetSelected(i == inventory.GetActiveHotbarIndex());
+            if (go != null) Destroy(go);
         }
     }
 }
