@@ -12,6 +12,7 @@ public class HotbarUI : MonoBehaviour
     [SerializeField] private GameObject handsSectionPrefab;
     [SerializeField] private GameObject expansionSectionPrefab;
 
+
     private readonly List<HotbarSectionUI> _sections = new List<HotbarSectionUI>();
     private readonly List<GameObject> _spawnedSections = new List<GameObject>();
     private HotbarSlotUI[] slotUIs;
@@ -140,17 +141,9 @@ public class HotbarUI : MonoBehaviour
     private void LayoutSections()
     {
         if (inventory == null || _sections.Count == 0) return;
-        var panelRt = transform as RectTransform;
-        if (panelRt == null) return;
-
-        panelRt.anchorMin = new Vector2(0f, 0f);
-        panelRt.anchorMax = new Vector2(0f, 0f);
-        panelRt.pivot = new Vector2(0f, 0f);
-        panelRt.anchoredPosition = new Vector2(PanelPaddingX, PanelPaddingY);
 
         int displayIndex = 0;
         float x = 0f;
-        float maxH = 0f;
         int count = inventory.GetDisplaySlotCount();
         bool[] widePattern = GetWideSlotPattern(count);
 
@@ -173,7 +166,6 @@ public class HotbarUI : MonoBehaviour
             var section = _sections[s];
             float sectionWidth = section.GetPreferredWidth(sectionSlotCount, sectionWide);
             float sectionHeight = 90f;
-            if (sectionHeight > maxH) maxH = sectionHeight;
 
             var sectionRt = section.transform as RectTransform;
             if (sectionRt != null)
@@ -187,8 +179,6 @@ public class HotbarUI : MonoBehaviour
             section.LayoutSlots(sectionSlotCount, sectionWide);
             x += sectionWidth + SectionGap;
         }
-        if (x > 0f) x -= SectionGap;
-        panelRt.sizeDelta = new Vector2(x, maxH);
     }
 
     private bool[] GetWideSlotPattern(int count)

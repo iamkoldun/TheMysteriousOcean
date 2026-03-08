@@ -16,6 +16,7 @@ public class InventoryPanelUI : MonoBehaviour
     [SerializeField] private RectTransform dragGhostRoot;
     [SerializeField] private Image dragGhostImage;
 
+
     private readonly List<GameObject> _spawnedSections = new List<GameObject>();
     private readonly List<InventorySectionUI> _sections = new List<InventorySectionUI>();
     private readonly List<(HotbarSlotUI slot, int displayIndex)> _slotBindings = new List<(HotbarSlotUI, int)>();
@@ -23,7 +24,9 @@ public class InventoryPanelUI : MonoBehaviour
     private int _draggedSourceDisplayIndex;
     private int _lastSlotCount;
     private bool[] _lastWidePattern;
-    private const float SectionGap = 12f;
+    [Header("Spacing")]
+    [Tooltip("Расстояние между секциями инвентаря (Руки, Рюкзак и т.д.)")]
+    [SerializeField] private float sectionGap = 12f;
     private const float PanelPaddingX = 20f;
     private const float PanelPaddingY = 20f;
 
@@ -237,17 +240,9 @@ public class InventoryPanelUI : MonoBehaviour
     private void LayoutSectionsVertical()
     {
         if (inventory == null || _sections.Count == 0) return;
-        var panelRt = transform as RectTransform;
-        if (panelRt == null) return;
-
-        panelRt.anchorMin = new Vector2(0f, 1f);
-        panelRt.anchorMax = new Vector2(0f, 1f);
-        panelRt.pivot = new Vector2(0f, 1f);
-        panelRt.anchoredPosition = new Vector2(PanelPaddingX, -PanelPaddingY);
 
         int displayIndex = 0;
         float y = 0f;
-        float totalWidth = 0f;
         int count = inventory.GetDisplaySlotCount();
         bool[] widePattern = GetWideSlotPattern(count);
 
@@ -268,7 +263,6 @@ public class InventoryPanelUI : MonoBehaviour
             var section = _sections[s];
             float sectionWidth = section.GetPreferredWidth(sectionSlotCount, sectionWide);
             float sectionHeight = section.GetPreferredHeight(sectionSlotCount, sectionWide);
-            if (sectionWidth > totalWidth) totalWidth = sectionWidth;
 
             var sectionRt = section.transform as RectTransform;
             if (sectionRt != null)
@@ -280,11 +274,8 @@ public class InventoryPanelUI : MonoBehaviour
                 sectionRt.sizeDelta = new Vector2(sectionWidth, sectionHeight);
             }
             section.LayoutSlots(sectionSlotCount, sectionWide);
-            y -= sectionHeight + SectionGap;
+            y -= sectionHeight + sectionGap;
         }
-
-        if (y < 0) y += SectionGap;
-        panelRt.sizeDelta = new Vector2(totalWidth, -y);
     }
 
     private bool[] GetWideSlotPattern(int count)

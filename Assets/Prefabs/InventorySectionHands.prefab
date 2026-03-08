@@ -28,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 660001001}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 660001007}
@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   background: {fileID: 660001005}
   slotsContainer: {fileID: 660001007}
-  slotPrefab: {fileID: 6527666941733493784, guid: a8d4d4b40e8ac4c819a07c344b0c32e5, type: 3}
+  slotPrefab: {fileID: 9089623778556334866, guid: e88091216b99142f19b1cc0e7664461a, type: 3}
   wideSlotPrefab: {fileID: 6527666941733493784, guid: d10c32ec9565a4dbfb2071aff011085e, type: 3}
 --- !u!222 &660001004
 CanvasRenderer:
