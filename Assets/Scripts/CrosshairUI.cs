@@ -73,6 +73,28 @@ public class CrosshairUI : MonoBehaviour
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         if (Physics.Raycast(ray, out RaycastHit hit, range, interactLayer))
         {
+            var heatGen = hit.collider.GetComponentInParent<HeatGenerator>();
+            if (heatGen != null)
+            {
+                var player = GameObject.FindWithTag("Player");
+                var inv = player != null ? player.GetComponent<Inventory>() : null;
+                var rightItem = inv != null ? inv.GetRightHandItem() : null;
+                if (rightItem != null && rightItem.GetComponent<BurnableItem>() != null)
+                {
+                    promptText.text = "E — Положить в генератор";
+                    promptText.gameObject.SetActive(true);
+                    return;
+                }
+            }
+
+            var pump = hit.collider.GetComponentInParent<WaterPump>();
+            if (pump != null)
+            {
+                promptText.text = pump.IsActive ? "E — Выключить помпу" : "E — Включить помпу";
+                promptText.gameObject.SetActive(true);
+                return;
+            }
+
             var item = hit.collider.GetComponentInParent<Item>();
             if (item != null)
             {

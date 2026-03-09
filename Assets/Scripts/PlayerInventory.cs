@@ -150,6 +150,26 @@ public class PlayerInventory : MonoBehaviour
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
         if (!Physics.Raycast(ray, out RaycastHit hit, pickupRange, pickupLayer))
             return;
+
+        var heatGen = hit.collider.GetComponentInParent<HeatGenerator>();
+        if (heatGen != null)
+        {
+            var rightItem = _inventory.GetRightHandItem();
+            if (rightItem != null && rightItem.GetComponent<BurnableItem>() != null && heatGen.TryFeedItem(rightItem))
+            {
+                _inventory.RemoveItemFromDisplaySlot(Inventory.RightHand);
+                RefreshHeldItem();
+                return;
+            }
+        }
+
+        var pump = hit.collider.GetComponentInParent<WaterPump>();
+        if (pump != null)
+        {
+            pump.Toggle();
+            return;
+        }
+
         var item = hit.collider.GetComponentInParent<Item>();
         if (item == null) return;
         if (_inventory.TryAddToHands(item))
