@@ -21,6 +21,8 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField] private float swimSinkSpeed = 1.6f;
     [SerializeField] private float swimVerticalAcceleration = 10f;
     [SerializeField] private float surfaceDampingDistance = 0.6f;
+    [SerializeField] private float surfaceHopDistance = 0.18f;
+    [SerializeField] private float surfaceHopSpeed = 4.35f;
     [SerializeField] private float swimStaminaDrainPerSecond = 18f;
     
     [Header("Ground Check")]
@@ -103,16 +105,11 @@ public class FirstPersonController : MonoBehaviour
     
     private void HandleGroundCheck()
     {
-        // Check if grounded using CharacterController
-        isGrounded = controller.isGrounded;
-        
-        // Additional raycast check for more reliable ground detection
-        if (!isGrounded)
-        {
-            Vector3 origin = transform.position + Vector3.up * 0.1f;
-            isGrounded = Physics.Raycast(origin, Vector3.down, groundCheckDistance + 0.1f, groundMask);
-        }
-        
+        bool hasGroundHit = TryGetGroundHit(out RaycastHit groundHit);
+
+        // Check if grounded using CharacterController plus a raycast for stable platform detection.
+        isGrounded = controller.isGrounded || hasGroundHit;
+
         // Reset vertical velocity when grounded
         if (isGrounded && velocity.y < 0f && !isSwimming)
         {
@@ -177,6 +174,11 @@ public class FirstPersonController : MonoBehaviour
             {
                 float surfaceFactor = Mathf.Clamp01(distanceToSurface / Mathf.Max(0.01f, surfaceDampingDistance));
                 targetVerticalSpeed *= Mathf.Lerp(0.2f, 1f, surfaceFactor);
+            }
+
+            if (canAscend && distanceToSurface <= surfaceHopDistance)
+            {
+                targetVerticalSpeed = Mathf.Max(targetVerticalSpeed, surfaceHopSpeed);
             }
 
             velocity.y = Mathf.MoveTowards(velocity.y, targetVerticalSpeed, swimVerticalAcceleration * Time.deltaTime);
@@ -317,4 +319,47 @@ public class FirstPersonController : MonoBehaviour
         Vector3 origin = transform.position + Vector3.up * 0.1f;
         Gizmos.DrawLine(origin, origin + Vector3.down * (groundCheckDistance + 0.1f));
     }
+
+    private bool TryGetGroundHit(out RaycastHit groundHit)
+    {
+        Vector3 origin = transform.position + Vector3.up * 0.2f;
+        float castRadius = Mathf.Max(0.05f, controller.radius * 0.9f);
+        float castDistance = groundCheckDistance + 0.2f;
+
+        RaycastHit[] hits = Physics.SphereCastAll(
+            origin,
+            castRadius,
+            Vector3.down,
+            castDistance,
+            groundMask,
+            QueryTriggerInteraction.Ignore);
+
+        float nearestDistance = float.MaxValue;
+        groundHit = default;
+
+        for (int i = 0; i < hits.Length; i++)
+        {
+            RaycastHit hit = hits[i];
+            if (hit.collider == null)
+            {
+                continue;
+            }
+
+            if (hit.transform == transform || hit.transform.IsChildOf(transform))
+            {
+                continue;
+            }
+
+            if (hit.distance >= nearestDistance)
+            {
+                continue;
+            }
+
+            nearestDistance = hit.distance;
+            groundHit = hit;
+        }
+
+        return nearestDistance < float.MaxValue;
+    }
+
 }

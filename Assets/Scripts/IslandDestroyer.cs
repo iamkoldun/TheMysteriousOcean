@@ -1,10 +1,11 @@
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
+[RequireComponent(typeof(BoxCollider), typeof(Rigidbody))]
 public class IslandDestroyer : MonoBehaviour
 {
     [SerializeField] private BoxCollider destroyerCollider;
     [SerializeField] private Renderer destroyerRenderer;
+    [SerializeField] private Rigidbody destroyerRigidbody;
 
     public Bounds WorldBounds
     {
@@ -34,6 +35,13 @@ public class IslandDestroyer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        SpawnedWorldObject worldObject = other.GetComponentInParent<SpawnedWorldObject>();
+        if (worldObject != null)
+        {
+            worldObject.DestroySelf();
+            return;
+        }
+
         MovingIsland movingIsland = other.GetComponentInParent<MovingIsland>();
         if (movingIsland != null)
         {
@@ -51,6 +59,13 @@ public class IslandDestroyer : MonoBehaviour
         EnsureCollider();
         destroyerCollider.isTrigger = true;
 
+        EnsureRigidbody();
+        if (destroyerRigidbody != null)
+        {
+            destroyerRigidbody.isKinematic = true;
+            destroyerRigidbody.useGravity = false;
+        }
+
         EnsureRenderer();
         if (destroyerRenderer != null)
         {
@@ -63,6 +78,14 @@ public class IslandDestroyer : MonoBehaviour
         if (destroyerCollider == null)
         {
             destroyerCollider = GetComponent<BoxCollider>();
+        }
+    }
+
+    private void EnsureRigidbody()
+    {
+        if (destroyerRigidbody == null)
+        {
+            destroyerRigidbody = GetComponent<Rigidbody>();
         }
     }
 
