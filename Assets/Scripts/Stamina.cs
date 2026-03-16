@@ -13,13 +13,14 @@ public class Stamina : MonoBehaviour
     [SerializeField] private float regenDelayAfterStop = 2f;
 
     private float _currentStamina;
-    private float _timeSinceStoppedSprinting;
-    private bool _wasSprintingLastFrame;
+    private float _timeSinceLastUse;
+    private bool _usedThisFrame;
 
     public float CurrentStamina => _currentStamina;
     public float MaxStamina => maxStamina;
     public float Normalized => maxStamina > 0 ? Mathf.Clamp01(_currentStamina / maxStamina) : 0f;
     public bool CanSprint => _currentStamina > 0f;
+    public bool HasStamina => _currentStamina > 0f;
 
     /// <summary>
     /// Call each frame from movement: true when player is sprinting this frame.
@@ -28,19 +29,50 @@ public class Stamina : MonoBehaviour
     {
         if (sprinting)
         {
-            _timeSinceStoppedSprinting = 0f;
-            _currentStamina = Mathf.Max(0f, _currentStamina - drainPerSecond * Time.deltaTime);
+            Use(drainPerSecond);
         }
-        else
+    }
+
+    public bool Use(float drainAmountPerSecond)
+    {
+        if (drainAmountPerSecond <= 0f)
         {
-            _timeSinceStoppedSprinting += Time.deltaTime;
-            if (_timeSinceStoppedSprinting >= regenDelayAfterStop)
-                _currentStamina = Mathf.Min(maxStamina, _currentStamina + regenPerSecond * Time.deltaTime);
+            return true;
         }
+
+        _usedThisFrame = true;
+
+        if (_currentStamina <= 0f)
+        {
+            _currentStamina = 0f;
+            return false;
+        }
+
+        _currentStamina = Mathf.Max(0f, _currentStamina - drainAmountPerSecond * Time.deltaTime);
+        return true;
+    }
+
+    public void FinishFrame(bool allowRegen = true)
+    {
+        if (_usedThisFrame)
+        {
+            _timeSinceLastUse = 0f;
+        }
+        else if (allowRegen)
+        {
+            _timeSinceLastUse += Time.deltaTime;
+            if (_timeSinceLastUse >= regenDelayAfterStop)
+            {
+                _currentStamina = Mathf.Min(maxStamina, _currentStamina + regenPerSecond * Time.deltaTime);
+            }
+        }
+
+        _usedThisFrame = false;
     }
 
     private void Awake()
     {
         _currentStamina = maxStamina;
+        _timeSinceLastUse = regenDelayAfterStop;
     }
 }

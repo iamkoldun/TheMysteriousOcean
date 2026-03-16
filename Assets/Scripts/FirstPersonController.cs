@@ -12,6 +12,16 @@ public class FirstPersonController : MonoBehaviour
     [Header("Jump Settings")]
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float gravity = -15f;
+
+    [Header("Swimming Settings")]
+    [SerializeField] private float swimMoveSpeed = 3.5f;
+    [SerializeField] private float swimAcceleration = 6f;
+    [SerializeField] private float swimDeceleration = 5f;
+    [SerializeField] private float swimAscendSpeed = 3.25f;
+    [SerializeField] private float swimSinkSpeed = 1.6f;
+    [SerializeField] private float swimVerticalAcceleration = 10f;
+    [SerializeField] private float surfaceDampingDistance = 0.6f;
+    [SerializeField] private float swimStaminaDrainPerSecond = 18f;
     
     [Header("Ground Check")]
     [SerializeField] private float groundCheckDistance = 0.2f;
@@ -32,6 +42,8 @@ public class FirstPersonController : MonoBehaviour
     private Vector3 velocity;
     private Vector3 currentMovement;
     private bool isGrounded;
+    private bool isSwimming;
+    private WaterVolume currentWater;
     
     private float cameraPitch = 0f;
     private float targetCameraPitch = 0f;
@@ -59,14 +71,20 @@ public class FirstPersonController : MonoBehaviour
     
     private void Update()
     {
+        UpdateSwimmingState();
         HandleGroundCheck();
         HandleMovement();
-        HandleJump();
+        HandleJumpOrSwim();
         HandleMouseLook();
-        ApplyGravity();
+        ApplyVerticalForces();
         
         // Move the character
         controller.Move(velocity * Time.deltaTime);
+
+        if (stamina != null)
+        {
+            stamina.FinishFrame(!isSwimming);
+        }
         
         // Unlock cursor with Escape (only when inventory is not open — inventory handles Esc to close)
         if (Input.GetKeyDown(KeyCode.Escape) && !InventoryScreenUI.IsOpen)
@@ -96,7 +114,7 @@ public class FirstPersonController : MonoBehaviour
         }
         
         // Reset vertical velocity when grounded
-        if (isGrounded && velocity.y < 0)
+        if (isGrounded && velocity.y < 0f && !isSwimming)
         {
             velocity.y = -2f; // Small downward force to keep grounded
         }
@@ -111,17 +129,33 @@ public class FirstPersonController : MonoBehaviour
         // Calculate movement direction relative to player rotation
         Vector3 direction = transform.right * horizontal + transform.forward * vertical;
         direction.Normalize();
-        
-        // Determine target speed (sprint or walk); sprint only if stamina allows
-        bool wantsSprint = Input.GetKey(KeyCode.LeftShift) && vertical > 0;
-        bool canSprint = stamina == null || stamina.CanSprint;
-        bool isSprinting = wantsSprint && canSprint;
-        if (stamina != null) stamina.SetSprinting(isSprinting);
-        float targetSpeed = isSprinting ? sprintSpeed : walkSpeed;
+
+        float targetSpeed = walkSpeed;
+        float smoothSpeed = direction.magnitude > 0f ? acceleration : deceleration;
+
+        if (isSwimming)
+        {
+            targetSpeed = swimMoveSpeed;
+            smoothSpeed = direction.magnitude > 0f ? swimAcceleration : swimDeceleration;
+        }
+        else
+        {
+            // Determine target speed (sprint or walk); sprint only if stamina allows
+            bool wantsSprint = Input.GetKey(KeyCode.LeftShift) && vertical > 0f;
+            bool canSprint = stamina == null || stamina.CanSprint;
+            bool isSprinting = wantsSprint && canSprint;
+
+            if (stamina != null)
+            {
+                stamina.SetSprinting(isSprinting);
+            }
+
+            targetSpeed = isSprinting ? sprintSpeed : walkSpeed;
+        }
+
         Vector3 targetMovement = direction * targetSpeed;
         
         // Smooth acceleration/deceleration
-        float smoothSpeed = direction.magnitude > 0 ? acceleration : deceleration;
         currentMovement = Vector3.Lerp(currentMovement, targetMovement, smoothSpeed * Time.deltaTime);
         
         // Apply horizontal movement
@@ -129,8 +163,32 @@ public class FirstPersonController : MonoBehaviour
         velocity.z = currentMovement.z;
     }
     
-    private void HandleJump()
+    private void HandleJumpOrSwim()
     {
+        if (isSwimming)
+        {
+            bool wantsAscend = Input.GetButton("Jump");
+            bool canAscend = wantsAscend && (stamina == null || stamina.Use(swimStaminaDrainPerSecond));
+
+            float targetVerticalSpeed = canAscend ? swimAscendSpeed : -swimSinkSpeed;
+            float distanceToSurface = currentWater != null ? currentWater.SurfaceY - GetHeadY() : 0f;
+
+            if (canAscend && distanceToSurface < surfaceDampingDistance)
+            {
+                float surfaceFactor = Mathf.Clamp01(distanceToSurface / Mathf.Max(0.01f, surfaceDampingDistance));
+                targetVerticalSpeed *= Mathf.Lerp(0.2f, 1f, surfaceFactor);
+            }
+
+            velocity.y = Mathf.MoveTowards(velocity.y, targetVerticalSpeed, swimVerticalAcceleration * Time.deltaTime);
+
+            if (isGrounded && velocity.y < -0.35f)
+            {
+                velocity.y = -0.35f;
+            }
+
+            return;
+        }
+
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             // Calculate jump velocity using physics formula: v = sqrt(2 * jumpHeight * gravity)
@@ -167,11 +225,88 @@ public class FirstPersonController : MonoBehaviour
         cameraTransform.localRotation = Quaternion.Euler(cameraPitch, 0f, 0f);
     }
     
-    private void ApplyGravity()
+    private void ApplyVerticalForces()
     {
+        if (isSwimming)
+        {
+            return;
+        }
+
         if (!isGrounded)
         {
             velocity.y += gravity * Time.deltaTime;
+        }
+    }
+
+    private void UpdateSwimmingState()
+    {
+        if (currentWater == null)
+        {
+            isSwimming = false;
+            return;
+        }
+
+        float feetY = GetFeetY();
+        float chestY = GetChestY();
+        isSwimming = feetY < currentWater.SurfaceY && chestY <= currentWater.SurfaceY;
+
+        if (isSwimming && velocity.y < -swimSinkSpeed)
+        {
+            velocity.y = -swimSinkSpeed;
+        }
+    }
+
+    private float GetFeetY()
+    {
+        return transform.position.y + controller.center.y - (controller.height * 0.5f);
+    }
+
+    private float GetChestY()
+    {
+        return GetFeetY() + controller.height * 0.65f;
+    }
+
+    private float GetHeadY()
+    {
+        return GetFeetY() + controller.height;
+    }
+
+    private void TrySetWater(Collider other)
+    {
+        WaterVolume water = other.GetComponent<WaterVolume>();
+        if (water == null)
+        {
+            water = other.GetComponentInParent<WaterVolume>();
+        }
+
+        if (water != null)
+        {
+            currentWater = water;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        TrySetWater(other);
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+        TrySetWater(other);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        WaterVolume water = other.GetComponent<WaterVolume>();
+        if (water == null)
+        {
+            water = other.GetComponentInParent<WaterVolume>();
+        }
+
+        if (water != null && water == currentWater)
+        {
+            currentWater = null;
+            isSwimming = false;
         }
     }
     
