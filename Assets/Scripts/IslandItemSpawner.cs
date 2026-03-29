@@ -1,9 +1,5 @@
 using UnityEngine;
 
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-
 [System.Serializable]
 public class ItemRarityTier
 {
@@ -27,7 +23,6 @@ public class IslandItemSpawner : MonoBehaviour
     private void Awake()
     {
         AutoFindSpawnPoints();
-        AutoAssignDefaultTiers();
         SpawnItems();
     }
 
@@ -58,47 +53,6 @@ public class IslandItemSpawner : MonoBehaviour
             if (child.name.StartsWith("ItemSpawnPoint"))
                 spawnPoints[index++] = child;
         }
-    }
-
-    private void AutoAssignDefaultTiers()
-    {
-        if (rarityTiers != null && rarityTiers.Length > 0) return;
-
-#if UNITY_EDITOR
-        rarityTiers = new ItemRarityTier[3];
-
-        rarityTiers[0] = new ItemRarityTier
-        {
-            label = "Common",
-            weight = 70f,
-            prefabs = new GameObject[]
-            {
-                AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/items/apple.prefab"),
-                AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/items/Log.prefab"),
-                AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/items/Rock2.prefab")
-            }
-        };
-
-        rarityTiers[1] = new ItemRarityTier
-        {
-            label = "Rare",
-            weight = 25f,
-            prefabs = new GameObject[]
-            {
-                AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/items/Tool_Axe_Improvised.prefab")
-            }
-        };
-
-        rarityTiers[2] = new ItemRarityTier
-        {
-            label = "Epic",
-            weight = 5f,
-            prefabs = new GameObject[]
-            {
-                AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/items/Tool_Flashlight_01.prefab")
-            }
-        };
-#endif
     }
 
     private void SpawnItems()
