@@ -39,6 +39,7 @@ public class SettingsPanelUI : MonoBehaviour
 
     private void OnBackClicked()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
         gameObject.SetActive(false);
         onBack?.Invoke();
     }

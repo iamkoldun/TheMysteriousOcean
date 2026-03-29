@@ -26,23 +26,27 @@ public class MainMenuUI : MonoBehaviour
 
     private void OnPlayClicked()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
         SceneManager.LoadScene("GameScene");
     }
 
     private void OnSettingsClicked()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
         if (mainPanel != null) mainPanel.SetActive(false);
         if (settingsPanel != null) settingsPanel.SetActive(true);
     }
 
     public void OnSettingsClosed()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
         if (settingsPanel != null) settingsPanel.SetActive(false);
         if (mainPanel != null) mainPanel.SetActive(true);
     }
 
     private void OnExitClicked()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else

@@ -48,6 +48,7 @@ public class PauseMenuUI : MonoBehaviour
 
     public void Pause()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
         IsPaused = true;
         if (pausePanel != null) pausePanel.SetActive(true);
         Time.timeScale = 0f;
@@ -57,6 +58,7 @@ public class PauseMenuUI : MonoBehaviour
 
     public void Resume()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
         IsPaused = false;
         if (pausePanel != null) pausePanel.SetActive(false);
         if (settingsPanel != null) settingsPanel.SetActive(false);
@@ -67,6 +69,7 @@ public class PauseMenuUI : MonoBehaviour
 
     public void OpenSettings()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
         if (pausePanel != null) pausePanel.SetActive(false);
         if (settingsPanel != null) settingsPanel.SetActive(true);
     }
@@ -79,6 +82,7 @@ public class PauseMenuUI : MonoBehaviour
 
     public void ExitToMainMenu()
     {
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
         IsPaused = false;
         Time.timeScale = 1f;
         SceneManager.LoadScene("MainMenu");

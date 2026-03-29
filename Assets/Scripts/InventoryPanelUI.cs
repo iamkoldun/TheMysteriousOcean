@@ -100,11 +100,13 @@ public class InventoryPanelUI : MonoBehaviour
             if (displayIndex == _draggedSourceDisplayIndex)
             {
                 inventory.TryPlaceItemInDisplaySlot(displayIndex, _draggedItem);
+                if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
                 EndDrag();
                 return;
             }
             if (inventory.TryPlaceItemInDisplaySlot(displayIndex, _draggedItem))
             {
+                if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
                 EndDrag();
                 return;
             }
@@ -117,6 +119,7 @@ public class InventoryPanelUI : MonoBehaviour
 
         Item item = inventory.RemoveItemFromDisplaySlot(displayIndex);
         if (item == null) return;
+        if (SoundManager.Instance != null) SoundManager.Instance.PlayClick();
         playerInventory.PutAwayItem(item);
         _draggedItem = item;
         _draggedSourceDisplayIndex = displayIndex;

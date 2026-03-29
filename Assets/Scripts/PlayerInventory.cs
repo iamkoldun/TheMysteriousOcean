@@ -159,6 +159,7 @@ public class PlayerInventory : MonoBehaviour
             {
                 _inventory.RemoveItemFromDisplaySlot(Inventory.RightHand);
                 RefreshHeldItem();
+                if (SoundManager.Instance != null) SoundManager.Instance.PlayGenerator();
                 return;
             }
         }
@@ -167,6 +168,7 @@ public class PlayerInventory : MonoBehaviour
         if (pump != null)
         {
             pump.Toggle();
+            if (SoundManager.Instance != null) SoundManager.Instance.PlayPump();
             return;
         }
 
@@ -175,10 +177,14 @@ public class PlayerInventory : MonoBehaviour
         if (_inventory.TryAddToHands(item))
         {
             RefreshHeldItem();
+            if (SoundManager.Instance != null) SoundManager.Instance.PlayObject();
             return;
         }
         if (_inventory.AddToExpansion(item))
+        {
             item.PutAway(inventoryStash);
+            if (SoundManager.Instance != null) SoundManager.Instance.PlayObject();
+        }
     }
 
     private void OnInventoryChanged()
