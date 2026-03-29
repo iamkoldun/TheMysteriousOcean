@@ -21,6 +21,7 @@ public class IslandSpawnManager : MonoBehaviour
     [SerializeField] private BoatDeckAnchor boatDeckAnchor;
     [SerializeField] private Vector3 moveDirection = Vector3.right;
     [SerializeField] private float boatSpeed = 8f;
+    [SerializeField] private bool stopBoatOnLeave = true;
 
     [Header("Island Spawn")]
     [SerializeField] private List<IslandSpawnEntry> islandPrefabs = new List<IslandSpawnEntry>();
@@ -149,7 +150,7 @@ public class IslandSpawnManager : MonoBehaviour
             return 0f;
         }
 
-        if (boatDeckAnchor != null && !boatDeckAnchor.HasPassengers)
+        if (stopBoatOnLeave && boatDeckAnchor != null && !boatDeckAnchor.HasPassengers)
         {
             return 0f;
         }

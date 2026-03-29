@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// Attach to inventory slot (same GameObject as HotbarSlotUI or child). Holds displayIndex and notifies panel on pointer down.
 /// </summary>
-public class InventorySlotRef : MonoBehaviour, IPointerDownHandler
+public class InventorySlotRef : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField] private int displayIndex;
     private InventoryPanelUI _panel;
@@ -24,5 +24,17 @@ public class InventorySlotRef : MonoBehaviour, IPointerDownHandler
     {
         if (_panel != null)
             _panel.OnSlotPointerDown(displayIndex);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (_panel != null)
+            _panel.OnSlotHoverEnter(displayIndex);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        if (_panel != null)
+            _panel.OnSlotHoverExit();
     }
 }

@@ -9,11 +9,13 @@ public class Item : MonoBehaviour
     public enum ItemSize { Light = 1, Heavy = 2 }
 
     [SerializeField] private string displayName = "Item";
+    [SerializeField, TextArea(2, 5)] private string description = "";
     [SerializeField] private ItemSize size = ItemSize.Light;
     [SerializeField] private Transform snapPoint;
     [SerializeField] private Sprite icon;
 
     public string DisplayName => displayName;
+    public string Description => description;
     public Sprite Icon => icon;
     public int SlotCount => (int)size;
     public bool IsHeavy => size == ItemSize.Heavy;

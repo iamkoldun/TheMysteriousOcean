@@ -19,16 +19,23 @@ public class InventoryScreenUI : MonoBehaviour
 
     private void Update()
     {
-        if (!Input.GetKeyDown(KeyCode.Tab) && !Input.GetKeyDown(KeyCode.Escape))
-            return;
+        if (PauseMenuUI.IsPaused) return;
 
+        bool tabPressed = Input.GetKeyDown(KeyCode.Tab);
+        bool escPressed = Input.GetKeyDown(KeyCode.Escape);
+        if (!tabPressed && !escPressed) return;
         if (inventoryOverlayRoot == null) return;
 
         bool isCurrentlyOpen = inventoryOverlayRoot.activeSelf;
         if (isCurrentlyOpen)
             Close();
-        else
+        else if (tabPressed)
             Open();
+    }
+
+    private void OnDestroy()
+    {
+        IsOpen = false;
     }
 
     public void Open()

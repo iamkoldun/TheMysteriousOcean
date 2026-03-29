@@ -24,6 +24,7 @@ public class InventoryPanelUI : MonoBehaviour
     private int _draggedSourceDisplayIndex;
     private int _lastSlotCount;
     private bool[] _lastWidePattern;
+    private ItemTooltipUI _tooltip;
     [Header("Spacing")]
     [Tooltip("Расстояние между секциями инвентаря (Руки, Рюкзак и т.д.)")]
     [SerializeField] private float sectionGap = 12f;
@@ -35,6 +36,10 @@ public class InventoryPanelUI : MonoBehaviour
         if (inventory == null) inventory = FindFirstObjectByType<Inventory>();
         if (playerInventory == null) playerInventory = FindFirstObjectByType<PlayerInventory>();
         if (dragGhostRoot != null) dragGhostRoot.gameObject.SetActive(false);
+
+        var canvas = GetComponentInParent<Canvas>();
+        if (canvas != null)
+            _tooltip = ItemTooltipUI.Create(canvas.transform);
     }
 
     private void OnEnable()
@@ -50,6 +55,8 @@ public class InventoryPanelUI : MonoBehaviour
             inventory.OnInventoryChanged -= Refresh;
         if (_draggedItem != null)
             EndDragDropInWorld();
+        if (_tooltip != null)
+            _tooltip.Hide();
     }
 
     private void Update()
@@ -65,6 +72,8 @@ public class InventoryPanelUI : MonoBehaviour
             if (Input.GetMouseButtonUp(0))
                 OnPointerUpWhileDragging();
         }
+        if (_tooltip != null)
+            _tooltip.UpdatePosition();
     }
 
     private void OnPointerUpWhileDragging()
@@ -111,6 +120,7 @@ public class InventoryPanelUI : MonoBehaviour
         playerInventory.PutAwayItem(item);
         _draggedItem = item;
         _draggedSourceDisplayIndex = displayIndex;
+        if (_tooltip != null) _tooltip.Hide();
         if (dragGhostImage != null)
         {
             dragGhostImage.sprite = item.Icon;
@@ -141,6 +151,25 @@ public class InventoryPanelUI : MonoBehaviour
         if (_draggedItem != null && inventory != null)
             inventory.TryPlaceItemInDisplaySlot(_draggedSourceDisplayIndex, _draggedItem);
         EndDrag();
+    }
+
+    public void OnSlotHoverEnter(int displayIndex)
+    {
+        if (_tooltip == null || inventory == null || _draggedItem != null) return;
+        var slot = inventory.GetDisplaySlot(displayIndex);
+        if (slot.isSecondHalf)
+        {
+            displayIndex = slot.startIndex;
+            slot = inventory.GetDisplaySlot(displayIndex);
+        }
+        if (!slot.hasItem || slot.item == null) { _tooltip.Hide(); return; }
+        _tooltip.Show(slot.item.DisplayName, slot.item.Description);
+    }
+
+    public void OnSlotHoverExit()
+    {
+        if (_tooltip != null)
+            _tooltip.Hide();
     }
 
     private void RebuildSlots()
@@ -330,5 +359,6 @@ public class InventoryPanelUI : MonoBehaviour
         {
             if (go != null) Destroy(go);
         }
+        if (_tooltip != null) Destroy(_tooltip.gameObject);
     }
 }
