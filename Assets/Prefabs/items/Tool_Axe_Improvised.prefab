@@ -77,6 +77,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fb17118b072f4c043a33181700ec0cb7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1329748380428848097}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: fb17118b072f4c043a33181700ec0cb7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3847370323966901674}
   m_SourcePrefab: {fileID: 100100000, guid: fb17118b072f4c043a33181700ec0cb7, type: 3}
 --- !u!1 &2687468530638008322 stripped
 GameObject:
@@ -144,6 +147,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Item
+  description: Anchient tool. 70 energy points
   size: 1
   snapPoint: {fileID: 0}
   icon: {fileID: 21300000, guid: 6cd4bae0a31dfad4b85eff1ab6daba21, type: 3}
+--- !u!114 &3847370323966901674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2687468530638008322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36b4e24e6eb594543ab824fdf147fd88, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  energyCount: 70

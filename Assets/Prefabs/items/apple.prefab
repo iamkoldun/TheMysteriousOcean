@@ -120,6 +120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Item
+  description: Light food. Gives 50 energy points
   size: 1
   snapPoint: {fileID: 0}
   icon: {fileID: 21300000, guid: 95939f5a54b7c4a2499e81df3adbac55, type: 3}

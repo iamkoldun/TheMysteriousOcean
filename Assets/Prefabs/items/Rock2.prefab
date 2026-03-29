@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Item
+  description: Heavy item. Not burnable
   size: 2
   snapPoint: {fileID: 0}
   icon: {fileID: 21300000, guid: 0cca06a27c1b83e46ad30f39526af5ef, type: 3}
