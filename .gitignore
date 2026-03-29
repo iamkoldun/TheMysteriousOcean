@@ -97,3 +97,6 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# Local Python deps (scripts/generate_asset_list_prefabs.py)
+.tools_openpyxl/
