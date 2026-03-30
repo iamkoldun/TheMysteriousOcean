@@ -32,6 +32,7 @@ public class WaterPump : MonoBehaviour
 
     public void Toggle()
     {
+        if (!_isActive && (generator == null || generator.StoredEnergy <= 0f)) return;
         _isActive = !_isActive;
         if (!_isActive && waterParticles != null)
         {
