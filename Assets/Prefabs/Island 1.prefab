@@ -56,7 +56,7 @@ Transform:
   m_GameObject: {fileID: 432447043307936550}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 8.8, z: 0}
+  m_LocalPosition: {x: 0, y: -6.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -756,7 +756,30 @@ MonoBehaviour:
     weight: 5
   minItemCount: 10
   maxItemCount: 20
-  spawnPoints: []
+  spawnPoints:
+  - {fileID: 4642104543535151382}
+  - {fileID: 8373390547251179215}
+  - {fileID: 4259910650809720016}
+  - {fileID: 5165350925519002485}
+  - {fileID: 7181765537054715527}
+  - {fileID: 1034905646601753513}
+  - {fileID: 549870393492611187}
+  - {fileID: 8331868393312037399}
+  - {fileID: 402181401286065389}
+  - {fileID: 752178028047010713}
+  - {fileID: 5511618212020927962}
+  - {fileID: 4508075709044975262}
+  - {fileID: 4511195997781522432}
+  - {fileID: 7008616620466749950}
+  - {fileID: 421379489819587869}
+  - {fileID: 8624941502587211119}
+  - {fileID: 6148385181328890639}
+  - {fileID: 6947583242789802759}
+  - {fileID: 5174734734830486341}
+  - {fileID: 458950885585229443}
+  - {fileID: 7005605439827633965}
+  - {fileID: 1520366350250684834}
+  - {fileID: 2123855178670598692}
 --- !u!1 &5760111893902947554
 GameObject:
   m_ObjectHideFlags: 0

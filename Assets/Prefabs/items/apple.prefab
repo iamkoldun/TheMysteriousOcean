@@ -77,9 +77,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 100000, guid: 8db774d63ffa4304fb8dddd6116ead54, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2674643862512962488}
-    - targetCorrespondingSourceObject: {fileID: 100000, guid: 8db774d63ffa4304fb8dddd6116ead54, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3530314492807314346}
   m_SourcePrefab: {fileID: 100100000, guid: 8db774d63ffa4304fb8dddd6116ead54, type: 3}
 --- !u!1 &9009694864488956236 stripped
 GameObject:
@@ -119,8 +116,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acd772c6d9f746d6bebb739290b9de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Item
-  description: Light food. Gives 50 energy points
+  displayName: Apple
+  description: Light food
   size: 1
   snapPoint: {fileID: 0}
   icon: {fileID: 21300000, guid: 95939f5a54b7c4a2499e81df3adbac55, type: 3}
@@ -151,16 +148,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3530314492807314346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9009694864488956236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 36b4e24e6eb594543ab824fdf147fd88, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  energyCount: 50

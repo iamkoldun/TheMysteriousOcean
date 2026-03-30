@@ -143,8 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acd772c6d9f746d6bebb739290b9de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Item
-  description: Flashlight
+  displayName: Flashlight
+  description: 
   size: 1
   snapPoint: {fileID: 0}
   icon: {fileID: 21300000, guid: 9d24f5d19813f9e4bbe963836ea6d96f, type: 3}

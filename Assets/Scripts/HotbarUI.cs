@@ -22,6 +22,8 @@ public class HotbarUI : MonoBehaviour
     private const float SectionGap = 12f;
     private const float PanelPaddingX = 20f;
     private const float PanelPaddingY = 20f;
+    private const float ScreenPaddingX = 20f;
+    private const float ScreenPaddingY = 20f;
 
     private void Awake()
     {
@@ -143,9 +145,10 @@ public class HotbarUI : MonoBehaviour
         if (inventory == null || _sections.Count == 0) return;
 
         int displayIndex = 0;
-        float x = 0f;
+        float x = PanelPaddingX;
         int count = inventory.GetDisplaySlotCount();
         bool[] widePattern = GetWideSlotPattern(count);
+        float maxHeight = 0f;
 
         for (int s = 0; s < _sections.Count; s++)
         {
@@ -166,6 +169,7 @@ public class HotbarUI : MonoBehaviour
             var section = _sections[s];
             float sectionWidth = section.GetPreferredWidth(sectionSlotCount, sectionWide);
             float sectionHeight = 90f;
+            if (sectionHeight > maxHeight) maxHeight = sectionHeight;
 
             var sectionRt = section.transform as RectTransform;
             if (sectionRt != null)
@@ -173,12 +177,34 @@ public class HotbarUI : MonoBehaviour
                 sectionRt.anchorMin = new Vector2(0f, 0f);
                 sectionRt.anchorMax = new Vector2(0f, 0f);
                 sectionRt.pivot = new Vector2(0f, 0f);
-                sectionRt.anchoredPosition = new Vector2(x, 0f);
+                sectionRt.anchoredPosition = new Vector2(x, PanelPaddingY);
                 sectionRt.sizeDelta = new Vector2(sectionWidth, sectionHeight);
             }
             section.LayoutSlots(sectionSlotCount, sectionWide);
             x += sectionWidth + SectionGap;
         }
+
+        float totalWidth = x - SectionGap + PanelPaddingX;
+        float totalHeight = maxHeight + PanelPaddingY * 2f;
+        LayoutPanel(totalWidth, totalHeight);
+    }
+
+    private void LayoutPanel(float width, float height)
+    {
+        var rt = transform as RectTransform;
+        if (rt == null) return;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.zero;
+        rt.pivot = Vector2.zero;
+        rt.anchoredPosition = new Vector2(ScreenPaddingX, ScreenPaddingY);
+        rt.sizeDelta = new Vector2(width, height);
+    }
+
+    public float GetPanelTop()
+    {
+        var rt = transform as RectTransform;
+        if (rt == null) return 0f;
+        return rt.anchoredPosition.y + rt.sizeDelta.y;
     }
 
     private bool[] GetWideSlotPattern(int count)
