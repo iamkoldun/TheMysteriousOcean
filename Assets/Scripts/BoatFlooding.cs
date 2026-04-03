@@ -30,6 +30,7 @@ public class BoatFlooding : MonoBehaviour
     private void Update()
     {
         if (_gameOver || PauseMenuUI.IsPaused) return;
+        if (GameOverUI.Instance != null && GameOverUI.Instance.IsShown) return;
 
         _elapsed += Time.deltaTime;
         if (_elapsed < startDelay) return;

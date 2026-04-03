@@ -74,6 +74,7 @@ public class FirstPersonController : MonoBehaviour
     private void Update()
     {
         if (PauseMenuUI.IsPaused) return;
+        if (GameOverUI.Instance != null && GameOverUI.Instance.IsShown) return;
 
         UpdateSwimmingState();
         HandleGroundCheck();

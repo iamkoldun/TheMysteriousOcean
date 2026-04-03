@@ -291,6 +291,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boatFlooding: {fileID: 1200272852}
+  fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  buttonSprite: {fileID: 21300000, guid: ad6ad57f2b8c4ea47b2abe4559d4a986, type: 3}
 --- !u!1 &247863377
 GameObject:
   m_ObjectHideFlags: 0
@@ -5980,6 +5982,7 @@ GameObject:
   - component: {fileID: 617392273}
   - component: {fileID: 617392272}
   - component: {fileID: 617392274}
+  - component: {fileID: 617392275}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -6137,6 +6140,19 @@ MonoBehaviour:
   drainPerSecond: 25
   regenPerSecond: 20
   regenDelayAfterStop: 2
+--- !u!114 &617392275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617392268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cf7f86d04cfd413fb6bd4ae6e67b0b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deathDepthOffset: -1
 --- !u!1 &708395929
 GameObject:
   m_ObjectHideFlags: 0
