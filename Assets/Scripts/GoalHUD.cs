@@ -10,14 +10,19 @@ public class GoalHUD : MonoBehaviour
     [SerializeField] private Color completedColor = new Color(0.2f, 0.9f, 0.3f, 0.9f);
     [SerializeField] private Color bgColor = new Color(0.1f, 0.1f, 0.15f, 0.75f);
 
+    [SerializeField] private Color dangerColor = new Color(0.9f, 0.2f, 0.2f, 0.9f);
+    [SerializeField] private Color dangerBgColor = new Color(0.25f, 0.05f, 0.05f, 0.75f);
+
     private Text _goalText;
     private Image _bgImage;
     private WaterPump _pump;
-    private bool _completed;
+    private BoatFlooding _flooding;
+    private int _goalPhase; // 0 = activate pump, 1 = keep afloat
 
     private void Awake()
     {
         _pump = FindFirstObjectByType<WaterPump>();
+        _flooding = FindFirstObjectByType<BoatFlooding>();
 
         // Background
         _bgImage = GetComponent<Image>();
@@ -57,26 +62,36 @@ public class GoalHUD : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (_completed) return;
-        if (_pump != null && _pump.IsActive)
+        if (_goalPhase == 0)
         {
-            _completed = true;
-            UpdateGoal();
+            if (_pump != null && _pump.IsActive)
+            {
+                _goalPhase = 1;
+                _goalText.color = completedColor;
+                _bgImage.color = new Color(0.05f, 0.2f, 0.05f, 0.75f);
+            }
+        }
+
+        if (_goalPhase == 1 && _flooding != null)
+        {
+            int pct = Mathf.RoundToInt(_flooding.WaterLevel * 100f);
+            _goalText.text = $"\u0426\u0435\u043b\u044c: \u041d\u0435 \u0434\u0430\u0439 \u043b\u043e\u0434\u043a\u0435 \u0443\u0442\u043e\u043d\u0443\u0442\u044c \u2014 \u0412\u043e\u0434\u0430: {pct}%";
+            if (pct > 75)
+            {
+                _goalText.color = dangerColor;
+                _bgImage.color = dangerBgColor;
+            }
+            else
+            {
+                _goalText.color = defaultColor;
+                _bgImage.color = bgColor;
+            }
         }
     }
 
     private void UpdateGoal()
     {
-        if (_completed)
-        {
-            _goalText.text = "Goal Completed: Water Pump Activated";
-            _goalText.color = completedColor;
-            _bgImage.color = new Color(0.05f, 0.2f, 0.05f, 0.75f);
-        }
-        else
-        {
-            _goalText.text = "Goal: Activate Water Pump";
-            _goalText.color = defaultColor;
-        }
+        _goalText.text = "\u0426\u0435\u043b\u044c: \u0412\u043a\u043b\u044e\u0447\u0438 \u0432\u043e\u0434\u044f\u043d\u0443\u044e \u043f\u043e\u043c\u043f\u0443";
+        _goalText.color = defaultColor;
     }
 }
