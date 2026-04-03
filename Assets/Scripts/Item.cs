@@ -77,6 +77,20 @@ public class Item : MonoBehaviour
         transform.rotation = rotation;
         var col = GetComponent<Collider>();
         if (col != null) col.enabled = true;
+
+        if (Physics.Raycast(position + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit, 20f))
+        {
+            SpawnedWorldObject platform = hit.collider.GetComponentInParent<SpawnedWorldObject>();
+            if (platform != null && platform.IsWorldMoving)
+            {
+                transform.SetParent(platform.transform);
+                transform.position = hit.point + Vector3.up * 0.2f;
+                if (_rb != null) _rb.isKinematic = true;
+                gameObject.SetActive(true);
+                return;
+            }
+        }
+
         if (_rb != null)
         {
             _rb.isKinematic = false;

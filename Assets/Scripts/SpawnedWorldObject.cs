@@ -3,8 +3,16 @@ using UnityEngine;
 [DisallowMultipleComponent]
 public class SpawnedWorldObject : MonoBehaviour
 {
+    public static float GlobalWorldSpeed { get; set; }
+
     private Renderer[] cachedRenderers;
     private Collider[] cachedColliders;
+
+    private Vector3 worldMoveDirection;
+    private bool isWorldMoving;
+
+    public bool IsWorldMoving => isWorldMoving;
+    public Vector3 LastMoveDelta { get; private set; }
 
     public Bounds WorldBounds
     {
@@ -27,6 +35,25 @@ public class SpawnedWorldObject : MonoBehaviour
     private void OnValidate()
     {
         CacheComponents();
+    }
+
+    private void Update()
+    {
+        if (!isWorldMoving || GlobalWorldSpeed <= 0f)
+        {
+            LastMoveDelta = Vector3.zero;
+            return;
+        }
+
+        Vector3 delta = worldMoveDirection * GlobalWorldSpeed * Time.deltaTime;
+        transform.position += delta;
+        LastMoveDelta = delta;
+    }
+
+    public void SetWorldMovement(Vector3 direction)
+    {
+        worldMoveDirection = direction.normalized;
+        isWorldMoving = true;
     }
 
     public void DestroySelf()

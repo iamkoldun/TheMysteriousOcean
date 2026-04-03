@@ -5983,6 +5983,7 @@ GameObject:
   - component: {fileID: 617392272}
   - component: {fileID: 617392274}
   - component: {fileID: 617392275}
+  - component: {fileID: 617392276}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -6153,6 +6154,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathDepthOffset: -1
+--- !u!114 &617392276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 617392268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4a3e0b812d244b44ba7a29220812992, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &708395929
 GameObject:
   m_ObjectHideFlags: 0
@@ -7194,7 +7207,7 @@ MonoBehaviour:
   boatDeckAnchor: {fileID: 609398259}
   moveDirection: {x: 1, y: 0, z: 0}
   boatSpeed: 5
-  stopBoatOnLeave: 1
+  stopBoatOnLeave: 0
   islandPrefabs:
   - prefab: {fileID: 5693605905004333758, guid: 1c3fcd05ac0e8410ca450595b66af910, type: 3}
     weight: 1

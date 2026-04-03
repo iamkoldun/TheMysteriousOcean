@@ -49,6 +49,7 @@ public class IslandSpawnManager : MonoBehaviour
     private float oceanTileLength;
     private float oceanTileWidth;
     private float distanceSinceLastIslandSpawn;
+    private float virtualDistanceTraveled;
     private bool worldInitialized;
 
     private void Reset()
@@ -147,16 +148,19 @@ public class IslandSpawnManager : MonoBehaviour
     {
         if (boatAnchor == null)
         {
+            SpawnedWorldObject.GlobalWorldSpeed = 0f;
             return 0f;
         }
 
         if (stopBoatOnLeave && boatDeckAnchor != null && !boatDeckAnchor.HasPassengers)
         {
+            SpawnedWorldObject.GlobalWorldSpeed = 0f;
             return 0f;
         }
 
+        SpawnedWorldObject.GlobalWorldSpeed = boatSpeed;
         float distanceMoved = boatSpeed * Time.deltaTime;
-        boatAnchor.position += worldForward * distanceMoved;
+        virtualDistanceTraveled += distanceMoved;
         return distanceMoved;
     }
 
@@ -169,8 +173,10 @@ public class IslandSpawnManager : MonoBehaviour
             return;
         }
 
-        GameObject spawnedIsland = Instantiate(selectedPrefab, spawnPoint.position, spawnPoint.rotation, spawnedWorldParent);
+        Vector3 spawnPosition = spawnPoint.position + worldForward * virtualDistanceTraveled;
+        GameObject spawnedIsland = Instantiate(selectedPrefab, spawnPosition, spawnPoint.rotation, spawnedWorldParent);
         SpawnedWorldObject worldObject = GetOrAddWorldObject(spawnedIsland);
+        worldObject.SetWorldMovement(-worldForward);
         spawnedIslands.Add(worldObject);
     }
 

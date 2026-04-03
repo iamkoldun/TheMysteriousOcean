@@ -148,7 +148,7 @@ public class PlayerInventory : MonoBehaviour
     {
         if (playerCamera == null) return;
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-        if (!Physics.Raycast(ray, out RaycastHit hit, pickupRange, pickupLayer))
+        if (!Physics.Raycast(ray, out RaycastHit hit, pickupRange, pickupLayer, QueryTriggerInteraction.Ignore))
             return;
 
         var heatGen = hit.collider.GetComponentInParent<HeatGenerator>();

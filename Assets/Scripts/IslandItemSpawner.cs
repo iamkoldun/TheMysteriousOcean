@@ -88,7 +88,9 @@ public class IslandItemSpawner : MonoBehaviour
         GameObject prefab = tier.prefabs[Random.Range(0, tier.prefabs.Length)];
         if (prefab == null) return;
 
-        Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
+        GameObject spawned = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, transform);
+        Rigidbody rb = spawned.GetComponent<Rigidbody>();
+        if (rb != null) rb.isKinematic = true;
     }
 
     private ItemRarityTier SelectRarityTier()
