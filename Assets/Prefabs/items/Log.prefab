@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6661716316940167854}
   - component: {fileID: 4320805628166863723}
   - component: {fileID: 175159375491684999}
-  - component: {fileID: 7203271874979046661}
+  - component: {fileID: 6979425655983838090}
   m_Layer: 0
   m_Name: Log
   m_TagString: Untagged
@@ -148,8 +148,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!64 &7203271874979046661
-MeshCollider:
+--- !u!65 &6979425655983838090
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -166,7 +166,6 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: d215d40c0f10c0e4d840d05f62427501, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2, y: 0.24778296, z: 0.24497804}
+  m_Center: {x: 0, y: 0.123906456, z: 0.00023217499}

@@ -144,7 +144,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   displayName: Flashlight
-  description: 
+  description: Portable light source
   size: 1
   snapPoint: {fileID: 0}
   icon: {fileID: 21300000, guid: 9d24f5d19813f9e4bbe963836ea6d96f, type: 3}

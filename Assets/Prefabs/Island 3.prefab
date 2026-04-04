@@ -2430,18 +2430,24 @@ MonoBehaviour:
   rarityTiers:
   - label: Common
     prefabs:
-    - {fileID: 9009694864488956236, guid: 0a7e6e6fdb16c4bf198abfd7aa3399b8, type: 3}
     - {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93, type: 3}
     - {fileID: 6085556514732272928, guid: ec6557f9fe57d4cc182f501fc4424296, type: 3}
-    weight: 70
+    - {fileID: 5788968203525986472, guid: f8ccaa39b2ab7414796d8eaab4b7bb81, type: 3}
+    - {fileID: 6917073365472557711, guid: e59cb3c0308f45c4cac1274abf832b77, type: 3}
+    - {fileID: 8652944857885367028, guid: cc312fcfb332c8a45bd9691cbf391d16, type: 3}
+    weight: 60
   - label: Rare
     prefabs:
-    - {fileID: 2687468530638008322, guid: b976af292fbd14e2b936cc0c95cdc30a, type: 3}
-    weight: 25
+    - {fileID: 4299444883013152252, guid: 0bc308d5d4320ef4384e58e1eb73428a, type: 3}
+    - {fileID: 4604007615793018727, guid: 9ce2ab4fcb9070246bb9ed4506a37518, type: 3}
+    - {fileID: 4009329966984602733, guid: 0f2d5ce1d5cb3a741a65c988a7f1ed22, type: 3}
+    - {fileID: 6576822161247775499, guid: e63c0883678c5ca4a80d34ae2165faa9, type: 3}
+    weight: 30
   - label: Epic
     prefabs:
-    - {fileID: 6101743728073356838, guid: fca9594671bb34bfab94274e8205352b, type: 3}
-    weight: 5
+    - {fileID: 6544734768900415561, guid: 101ee0da20ef7b248ab197efd648e171, type: 3}
+    - {fileID: 6007949987691165870, guid: da134af5a8379ce4283220646e54ceed, type: 3}
+    weight: 10
   minItemCount: 20
   maxItemCount: 24
   spawnPoints:
