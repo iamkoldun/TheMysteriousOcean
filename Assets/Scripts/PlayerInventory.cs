@@ -172,6 +172,21 @@ public class PlayerInventory : MonoBehaviour
             return;
         }
 
+        var hole = hit.collider.GetComponentInParent<BoatHole>();
+        if (hole != null && !hole.IsPatched)
+        {
+            var rightItem = _inventory.GetRightHandItem();
+            if (rightItem != null && rightItem.GetComponent<Patch>() != null)
+            {
+                hole.Patch();
+                _inventory.RemoveItemFromDisplaySlot(Inventory.RightHand);
+                Destroy(rightItem.gameObject);
+                RefreshHeldItem();
+                if (SoundManager.Instance != null) SoundManager.Instance.PlayObject();
+            }
+            return;
+        }
+
         var item = hit.collider.GetComponentInParent<Item>();
         if (item == null) return;
         if (_inventory.TryAddToHands(item))

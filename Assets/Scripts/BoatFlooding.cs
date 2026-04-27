@@ -1,17 +1,18 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// The boat slowly sinks over time. When the pump is active, it rises back up.
-/// Game over when the boat is fully submerged.
+/// The boat sinks based on active BoatHole components on/under it. Pump raises it.
+/// With zero active holes, the boat does not sink. Game over when fully submerged.
 /// </summary>
 public class BoatFlooding : MonoBehaviour
 {
     [Header("Sinking")]
-    [SerializeField] private float sinkRatePerSecond = 0.08f;
     [SerializeField] private float riseRatePerSecond = 0.2f;
     [SerializeField] private float maxSinkDepth = 4f;
     [SerializeField] private float startDelay = 10f;
 
+    private readonly List<BoatHole> _holes = new();
     private float _startY;
     private float _sunkAmount;
     private float _elapsed;
@@ -21,6 +22,16 @@ public class BoatFlooding : MonoBehaviour
     public float WaterLevel => Mathf.Clamp01(_sunkAmount / maxSinkDepth);
     public bool IsGameOver => _gameOver;
     public float RiseRate => riseRatePerSecond;
+
+    public void RegisterHole(BoatHole hole)
+    {
+        if (hole != null && !_holes.Contains(hole)) _holes.Add(hole);
+    }
+
+    public void UnregisterHole(BoatHole hole)
+    {
+        if (hole != null) _holes.Remove(hole);
+    }
 
     private void Awake()
     {
@@ -35,7 +46,14 @@ public class BoatFlooding : MonoBehaviour
         _elapsed += Time.deltaTime;
         if (_elapsed < startDelay) return;
 
-        _sunkAmount += sinkRatePerSecond * Time.deltaTime;
+        float rate = 0f;
+        for (int i = 0; i < _holes.Count; i++)
+        {
+            if (_holes[i] != null) rate += _holes[i].ActiveSinkRate;
+        }
+        if (rate <= 0f) return;
+
+        _sunkAmount += rate * Time.deltaTime;
         _sunkAmount = Mathf.Clamp(_sunkAmount, 0f, maxSinkDepth);
 
         ApplyPosition();

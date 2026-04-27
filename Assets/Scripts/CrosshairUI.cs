@@ -95,6 +95,18 @@ public class CrosshairUI : MonoBehaviour
                 return;
             }
 
+            var hole = hit.collider.GetComponentInParent<BoatHole>();
+            if (hole != null && !hole.IsPatched)
+            {
+                var player = GameObject.FindWithTag("Player");
+                var inv = player != null ? player.GetComponent<Inventory>() : null;
+                var rightItem = inv != null ? inv.GetRightHandItem() : null;
+                bool hasPatch = rightItem != null && rightItem.GetComponent<Patch>() != null;
+                promptText.text = hasPatch ? "E — Patch the hole" : "You need Patch to fix this hole";
+                promptText.gameObject.SetActive(true);
+                return;
+            }
+
             var item = hit.collider.GetComponentInParent<Item>();
             if (item != null)
             {

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4021738025817130275}
   - component: {fileID: 1115108276566313230}
   - component: {fileID: 7704797575804373178}
+  - component: {fileID: 3966333351277731578}
   m_Layer: 0
   m_Name: SM_THE_CLOTH
   m_TagString: Untagged
@@ -123,8 +124,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acd772c6d9f746d6bebb739290b9de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Cloth
-  description: Piece of fabric. Gives 25 energy points
+  displayName: Patch
+  description: Use to patch a hole in the boat. Also burns for 25 energy.
   size: 1
   snapPoint: {fileID: 0}
   icon: {fileID: 0}
@@ -168,3 +169,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   energyCount: 25
+--- !u!114 &3966333351277731578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4604007615793018727}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fb6dfd5d195f422ea64d5a727c2e13b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

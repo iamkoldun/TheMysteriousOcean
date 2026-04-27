@@ -27,7 +27,7 @@ public class IslandSpawnManager : MonoBehaviour
     [SerializeField] private List<IslandSpawnEntry> islandPrefabs = new List<IslandSpawnEntry>();
     [SerializeField] private List<Transform> spawnPoints = new List<Transform>();
     [FormerlySerializedAs("islandSpawnInterval")]
-    [SerializeField] private float islandSpawnDistance = 80f;
+    [SerializeField] private float islandSpawnDistance = 240f;
 
     [Header("Ocean")]
     [SerializeField] private GameObject oceanPrefab;
@@ -56,7 +56,7 @@ public class IslandSpawnManager : MonoBehaviour
     {
         moveDirection = Vector3.right;
         boatSpeed = 8f;
-        islandSpawnDistance = 80f;
+        islandSpawnDistance = 240f;
         oceanSpawnHeight = 3.81f;
         oceanTilesAhead = 2;
         oceanTilesBehind = 1;

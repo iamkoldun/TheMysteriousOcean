@@ -13,6 +13,10 @@ public class IslandItemSpawner : MonoBehaviour
     [Header("Rarity Tiers")]
     [SerializeField] private ItemRarityTier[] rarityTiers;
 
+    [Header("Guaranteed Items")]
+    [Tooltip("One of each prefab here is guaranteed to spawn on its own spawn point before random items roll.")]
+    [SerializeField] private GameObject[] guaranteedItems;
+
     [Header("Spawn Settings")]
     [SerializeField] private int minItemCount = 3;
     [SerializeField] private int maxItemCount = 5;
@@ -58,23 +62,38 @@ public class IslandItemSpawner : MonoBehaviour
     private void SpawnItems()
     {
         if (spawnPoints == null || spawnPoints.Length == 0) return;
-        if (rarityTiers == null || rarityTiers.Length == 0) return;
-
-        int count = Random.Range(minItemCount, maxItemCount + 1);
-        count = Mathf.Min(count, spawnPoints.Length);
 
         int[] indices = new int[spawnPoints.Length];
         for (int i = 0; i < indices.Length; i++) indices[i] = i;
-
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < indices.Length; i++)
         {
             int j = Random.Range(i, indices.Length);
             (indices[i], indices[j]) = (indices[j], indices[i]);
         }
 
+        int cursor = 0;
+
+        if (guaranteedItems != null)
+        {
+            for (int g = 0; g < guaranteedItems.Length && cursor < indices.Length; g++)
+            {
+                GameObject prefab = guaranteedItems[g];
+                if (prefab == null) continue;
+                Transform point = spawnPoints[indices[cursor++]];
+                if (point == null) continue;
+                SpawnPrefab(prefab, point);
+            }
+        }
+
+        if (rarityTiers == null || rarityTiers.Length == 0) return;
+
+        int remaining = indices.Length - cursor;
+        int count = Random.Range(minItemCount, maxItemCount + 1);
+        count = Mathf.Min(count, remaining);
+
         for (int i = 0; i < count; i++)
         {
-            Transform point = spawnPoints[indices[i]];
+            Transform point = spawnPoints[indices[cursor++]];
             if (point == null) continue;
             SpawnSingleItem(point);
         }
@@ -88,6 +107,11 @@ public class IslandItemSpawner : MonoBehaviour
         GameObject prefab = tier.prefabs[Random.Range(0, tier.prefabs.Length)];
         if (prefab == null) return;
 
+        SpawnPrefab(prefab, spawnPoint);
+    }
+
+    private void SpawnPrefab(GameObject prefab, Transform spawnPoint)
+    {
         GameObject spawned = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation, transform);
         Rigidbody rb = spawned.GetComponent<Rigidbody>();
         if (rb != null) rb.isKinematic = true;
