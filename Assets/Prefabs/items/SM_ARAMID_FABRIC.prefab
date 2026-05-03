@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4149081167822279260}
   - component: {fileID: 6730200840147429680}
   - component: {fileID: 8734370692463423216}
+  - component: {fileID: 4959739533186616223}
   m_Layer: 0
   m_Name: SM_ARAMID_FABRIC
   m_TagString: Untagged
@@ -123,11 +124,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acd772c6d9f746d6bebb739290b9de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Aramid Fabric
+  displayName: Patch
   description: Strong synthetic fabric. Gives 20 energy points
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 42df8fcacde394c3ba5fbed85a670437, type: 3}
 --- !u!54 &6730200840147429680
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -168,3 +169,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   energyCount: 20
+--- !u!114 &4959739533186616223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4299444883013152252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fb6dfd5d195f422ea64d5a727c2e13b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

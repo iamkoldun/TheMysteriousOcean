@@ -108,7 +108,7 @@ MonoBehaviour:
   description: Sturdy metal tool
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1ff8af62b010f452bb46656838f0b4f9, type: 3}
 --- !u!54 &943581161598083246
 Rigidbody:
   m_ObjectHideFlags: 0

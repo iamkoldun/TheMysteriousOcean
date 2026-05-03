@@ -111,7 +111,7 @@ MonoBehaviour:
   description: Sweet red berries
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5bd047a3669504311907e246282c3ca8, type: 3}
 --- !u!54 &2523573344058954305
 Rigidbody:
   m_ObjectHideFlags: 0

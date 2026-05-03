@@ -126,7 +126,7 @@ MonoBehaviour:
   description: Precision optical sight
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 328bbce13004147dfb29ab066553973f, type: 3}
 --- !u!54 &7763595606812218619
 Rigidbody:
   m_ObjectHideFlags: 0

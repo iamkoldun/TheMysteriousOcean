@@ -2446,10 +2446,9 @@ MonoBehaviour:
   - label: Epic
     prefabs:
     - {fileID: 6544734768900415561, guid: 101ee0da20ef7b248ab197efd648e171, type: 3}
-    - {fileID: 6007949987691165870, guid: da134af5a8379ce4283220646e54ceed, type: 3}
     weight: 10
   guaranteedItems:
-  - {fileID: 4604007615793018727, guid: 9ce2ab4fcb9070246bb9ed4506a37518, type: 3}
+  - {fileID: 4299444883013152252, guid: 0bc308d5d4320ef4384e58e1eb73428a, type: 3}
   minItemCount: 20
   maxItemCount: 24
   spawnPoints:

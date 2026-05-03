@@ -111,7 +111,7 @@ MonoBehaviour:
   description: Edible forest mushroom
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 4d8d52edf20604b358c1a9f275a419b5, type: 3}
 --- !u!54 &4306515641116091767
 Rigidbody:
   m_ObjectHideFlags: 0

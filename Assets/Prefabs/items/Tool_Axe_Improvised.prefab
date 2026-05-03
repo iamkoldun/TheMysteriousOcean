@@ -150,7 +150,7 @@ MonoBehaviour:
   description: Anchient tool. 70 energy points
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 21300000, guid: 6cd4bae0a31dfad4b85eff1ab6daba21, type: 3}
+  icon: {fileID: 21300000, guid: 8e1ea2ea1d4a24a21a842000fb53f020, type: 3}
 --- !u!114 &3847370323966901674
 MonoBehaviour:
   m_ObjectHideFlags: 0

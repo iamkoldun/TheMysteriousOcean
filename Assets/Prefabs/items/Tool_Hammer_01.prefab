@@ -108,7 +108,7 @@ MonoBehaviour:
   description: Heavy metal tool
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: e69586ca6c8cf4158aeeb606e8f1b9fa, type: 3}
 --- !u!54 &3244214749723676227
 Rigidbody:
   m_ObjectHideFlags: 0

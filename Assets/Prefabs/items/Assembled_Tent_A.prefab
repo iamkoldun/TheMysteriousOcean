@@ -126,7 +126,7 @@ MonoBehaviour:
   description: Portable canvas shelter
   size: 2
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9a77ff514ca9b470db4bed500a151629, type: 3}
 --- !u!54 &1526716406044453712
 Rigidbody:
   m_ObjectHideFlags: 0

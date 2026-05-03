@@ -123,11 +123,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acd772c6d9f746d6bebb739290b9de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayName: Wood Plank
+  displayName: Board
   description: Wooden plank. Gives 70 energy points
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1d166a855fd3044cd8598bb3ca3915ce, type: 3}
 --- !u!54 &3512340379944974239
 Rigidbody:
   m_ObjectHideFlags: 0

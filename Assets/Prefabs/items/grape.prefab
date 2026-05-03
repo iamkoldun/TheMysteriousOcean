@@ -111,7 +111,7 @@ MonoBehaviour:
   description: Bunch of fresh grapes
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: aa3873bda95fd431e9f384aa1355b3ff, type: 3}
 --- !u!54 &4178511083386326673
 Rigidbody:
   m_ObjectHideFlags: 0

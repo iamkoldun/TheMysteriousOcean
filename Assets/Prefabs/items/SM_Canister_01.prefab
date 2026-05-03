@@ -126,7 +126,7 @@ MonoBehaviour:
   description: Empty metal container. Not burnable
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 974bc3e63b6474e3ab9b13ed70fb7fd5, type: 3}
 --- !u!54 &7357613856620325557
 Rigidbody:
   m_ObjectHideFlags: 0

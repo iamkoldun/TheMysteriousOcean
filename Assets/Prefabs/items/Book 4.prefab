@@ -127,7 +127,7 @@ MonoBehaviour:
   description: Old worn book. Gives 30 energy points
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ba8c391809f9d460ebf1ae2c2ce162cc, type: 3}
 --- !u!54 &1034121980099649054
 Rigidbody:
   m_ObjectHideFlags: 0

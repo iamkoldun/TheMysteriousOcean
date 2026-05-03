@@ -105,7 +105,7 @@ MonoBehaviour:
   description: Heavy item. Not burnable
   size: 2
   snapPoint: {fileID: 0}
-  icon: {fileID: 21300000, guid: 0cca06a27c1b83e46ad30f39526af5ef, type: 3}
+  icon: {fileID: 21300000, guid: 2484dad6dfb484e038f687b9d10e5deb, type: 3}
 --- !u!54 &3896207644607779975
 Rigidbody:
   m_ObjectHideFlags: 0

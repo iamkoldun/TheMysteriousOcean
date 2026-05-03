@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8513239949734428999}
   - component: {fileID: 1142849659001303733}
   - component: {fileID: 7700036645558320493}
+  - component: {fileID: 8862516451297751765}
+  - component: {fileID: 6633712219834186428}
   m_Layer: 0
   m_Name: SleepingBag_cl  V2
   m_TagString: Untagged
@@ -58,6 +60,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -83,3 +88,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8862516451297751765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6744186217733591482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7acd772c6d9f746d6bebb739290b9de5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  displayName: Mounting Kit
+  description: Mounting kit assembled from metal, fabric and glue.
+  size: 1
+  snapPoint: {fileID: 0}
+  icon: {fileID: 21300000, guid: 4b213f2a3bae2432b8c35b874629cf82, type: 3}
+--- !u!65 &6633712219834186428
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6744186217733591482}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.33393484, y: 0.22361994, z: 0.22361994}
+  m_Center: {x: 0, y: 0.11180991, z: -0.000000018626451}

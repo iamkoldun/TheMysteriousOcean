@@ -107,7 +107,7 @@ MonoBehaviour:
   description: Piece of tree. Give 85 energy points
   size: 1
   snapPoint: {fileID: 0}
-  icon: {fileID: 21300000, guid: 636a39c9c2080f54f9e0ef8738b020b2, type: 3}
+  icon: {fileID: 21300000, guid: 7808aa285049e476597f1fdd52a26c1e, type: 3}
 --- !u!114 &4320805628166863723
 MonoBehaviour:
   m_ObjectHideFlags: 0
