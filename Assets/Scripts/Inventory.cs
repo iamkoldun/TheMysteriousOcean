@@ -806,4 +806,52 @@ public class Inventory : MonoBehaviour
     {
         OnInventoryChanged?.Invoke();
     }
+
+    // ── Item-id queries (for crafting) ──
+
+    public int CountItemsById(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return 0;
+        int count = 0;
+        for (int h = 0; h < HandSlotCount; h++)
+        {
+            var s = _handSlots[h];
+            if (!s.hasItem || s.isSecondHalf || s.item == null) continue;
+            if (s.item.ItemId == id) count++;
+        }
+        for (int e = 0; e < _expansions.Count; e++)
+        {
+            var exp = _expansions[e];
+            for (int i = 0; i < exp.slots.Count; i++)
+            {
+                var s = exp.slots[i];
+                if (!s.hasItem || s.isSecondHalf || s.item == null) continue;
+                if (s.item.ItemId == id) count++;
+            }
+        }
+        return count;
+    }
+
+    public Item RemoveOneItemById(string id)
+    {
+        if (string.IsNullOrEmpty(id)) return null;
+        for (int h = 0; h < HandSlotCount; h++)
+        {
+            var s = _handSlots[h];
+            if (!s.hasItem || s.isSecondHalf || s.item == null) continue;
+            if (s.item.ItemId == id) return RemoveItemFromDisplaySlot(h);
+        }
+        int displayIndex = HandSlotCount;
+        for (int e = 0; e < _expansions.Count; e++)
+        {
+            var exp = _expansions[e];
+            for (int i = 0; i < exp.slots.Count; i++, displayIndex++)
+            {
+                var s = exp.slots[i];
+                if (!s.hasItem || s.isSecondHalf || s.item == null) continue;
+                if (s.item.ItemId == id) return RemoveItemFromDisplaySlot(displayIndex);
+            }
+        }
+        return null;
+    }
 }

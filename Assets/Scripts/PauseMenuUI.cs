@@ -42,6 +42,7 @@ public class PauseMenuUI : MonoBehaviour
         }
 
         if (InventoryScreenUI.IsOpen) return;
+        if (CraftingPanelUI.IsOpen) return;
 
         Pause();
     }

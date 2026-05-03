@@ -123,6 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7acd772c6d9f746d6bebb739290b9de5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemId: fabric
   displayName: Fabric
   description: Use to patch a hole in the boat. Also burns for 25 energy.
   size: 1

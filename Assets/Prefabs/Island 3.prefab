@@ -2435,6 +2435,8 @@ MonoBehaviour:
     - {fileID: 5788968203525986472, guid: f8ccaa39b2ab7414796d8eaab4b7bb81, type: 3}
     - {fileID: 6917073365472557711, guid: e59cb3c0308f45c4cac1274abf832b77, type: 3}
     - {fileID: 8652944857885367028, guid: cc312fcfb332c8a45bd9691cbf391d16, type: 3}
+    - {fileID: 1832585270870641546, guid: 0d1a63f5304d9184f940bb0308e5d919, type: 3}
+    - {fileID: 5124042311839069400, guid: 77ff5fc6b3b6f5a4cb0fe574d6726a93, type: 3}
     weight: 60
   - label: Rare
     prefabs:

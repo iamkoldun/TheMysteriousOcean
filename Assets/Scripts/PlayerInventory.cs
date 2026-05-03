@@ -83,6 +83,8 @@ public class PlayerInventory : MonoBehaviour
 
     private void Update()
     {
+        if (CraftingPanelUI.IsOpen) return;
+
         HandleNumberKeys();
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -169,6 +171,17 @@ public class PlayerInventory : MonoBehaviour
         {
             pump.Toggle();
             if (SoundManager.Instance != null) SoundManager.Instance.PlayPump();
+            return;
+        }
+
+        var workbench = hit.collider.GetComponentInParent<Workbench>();
+        if (workbench != null)
+        {
+            if (CraftingPanelUI.Instance != null)
+            {
+                CraftingPanelUI.Instance.Open(workbench);
+                if (SoundManager.Instance != null) SoundManager.Instance.PlayObject();
+            }
             return;
         }
 

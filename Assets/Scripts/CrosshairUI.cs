@@ -87,6 +87,14 @@ public class CrosshairUI : MonoBehaviour
                 }
             }
 
+            var workbench = hit.collider.GetComponentInParent<Workbench>();
+            if (workbench != null)
+            {
+                promptText.text = "Верстак";
+                promptText.gameObject.SetActive(true);
+                return;
+            }
+
             var pump = hit.collider.GetComponentInParent<WaterPump>();
             if (pump != null)
             {
