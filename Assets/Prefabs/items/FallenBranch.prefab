@@ -125,7 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: stick
   displayName: Stick
-  description: Dry branch. Gives 60 energy points
+  description: Dry branch.
   size: 1
   snapPoint: {fileID: 0}
   icon: {fileID: 21300000, guid: b739e6ae8b6e44eb481bbc24096ecb9d, type: 3}
@@ -168,4 +168,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36b4e24e6eb594543ab824fdf147fd88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyCount: 60
+  energyCount: 50

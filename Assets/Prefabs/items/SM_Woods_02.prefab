@@ -125,7 +125,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: board
   displayName: Board
-  description: Wooden plank. Gives 70 energy points
+  description: Wooden plank.
   size: 1
   snapPoint: {fileID: 0}
   icon: {fileID: 21300000, guid: 1d166a855fd3044cd8598bb3ca3915ce, type: 3}
@@ -168,4 +168,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36b4e24e6eb594543ab824fdf147fd88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  energyCount: 70
+  energyCount: 150
