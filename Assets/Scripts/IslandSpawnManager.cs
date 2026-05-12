@@ -51,6 +51,7 @@ public class IslandSpawnManager : MonoBehaviour
     private float distanceSinceLastIslandSpawn;
     private float virtualDistanceTraveled;
     private bool worldInitialized;
+    private float boatAnchorInitialY;
 
     private void Reset()
     {
@@ -136,6 +137,7 @@ public class IslandSpawnManager : MonoBehaviour
         }
 
         oceanOrigin = GetBoatWaterPosition();
+        boatAnchorInitialY = boatAnchor.position.y;
         distanceSinceLastIslandSpawn = 0f;
 
         EnsureOceanMetrics();
@@ -174,6 +176,10 @@ public class IslandSpawnManager : MonoBehaviour
         }
 
         Vector3 spawnPosition = spawnPoint.position + worldForward * virtualDistanceTraveled;
+        // Compensate for boat sinking so islands always spawn at their original water-level height,
+        // not at the (possibly sunk) current boat height.
+        if (boatAnchor != null)
+            spawnPosition.y += boatAnchorInitialY - boatAnchor.position.y;
         GameObject spawnedIsland = Instantiate(selectedPrefab, spawnPosition, spawnPoint.rotation, spawnedWorldParent);
         SpawnedWorldObject worldObject = GetOrAddWorldObject(spawnedIsland);
         worldObject.SetWorldMovement(-worldForward);

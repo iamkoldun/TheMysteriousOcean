@@ -79,7 +79,7 @@ public class BoatWaterLevelUI : MonoBehaviour
         label.fontSize = 11;
         label.alignment = TextAnchor.MiddleLeft;
         label.color = new Color(0.85f, 0.85f, 0.85f, 1f);
-        label.text = "\u0412\u043e\u0434\u0430";
+        label.text = "Water";
         var labelRt = labelGo.transform as RectTransform;
         labelRt.anchorMin = new Vector2(0f, 1f);
         labelRt.anchorMax = new Vector2(1f, 1f);

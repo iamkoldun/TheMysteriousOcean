@@ -211,16 +211,43 @@ public class CraftingPanelUI : MonoBehaviour
         rowBg.color = new Color(0f, 0f, 0f, 0.25f);
 
         var row = new RecipeRow { root = rowGo, recipe = recipe };
-        int ingCount = recipe.IngredientItemIds != null ? recipe.IngredientItemIds.Length : 0;
-        row.ingredientCounts = new Text[ingCount];
+        var ids = recipe.IngredientItemIds;
+        int ingCount = ids != null ? ids.Length : 0;
 
-        float x = 8f;
+        // Deduplicate ingredients: one slot per unique id, count = occurrences.
+        var uniqueIds = new List<string>();
+        var firstIndex = new Dictionary<string, int>();
+        var needCount = new Dictionary<string, int>();
         for (int i = 0; i < ingCount; i++)
         {
-            Sprite icon = (recipe.IngredientIcons != null && i < recipe.IngredientIcons.Length) ? recipe.IngredientIcons[i] : null;
-            Item prefab = (recipe.IngredientPrefabs != null && i < recipe.IngredientPrefabs.Length) ? recipe.IngredientPrefabs[i] : null;
+            string id = ids[i];
+            if (string.IsNullOrEmpty(id)) continue;
+            if (!firstIndex.ContainsKey(id))
+            {
+                firstIndex[id] = i;
+                uniqueIds.Add(id);
+                needCount[id] = 1;
+            }
+            else
+            {
+                needCount[id]++;
+            }
+        }
+
+        row.uniqueIngredientIds = uniqueIds.ToArray();
+        row.ingredientNeeded = new int[uniqueIds.Count];
+        row.ingredientCounts = new Text[uniqueIds.Count];
+
+        float x = 8f;
+        for (int u = 0; u < uniqueIds.Count; u++)
+        {
+            string id = uniqueIds[u];
+            int srcIdx = firstIndex[id];
+            Sprite icon = (recipe.IngredientIcons != null && srcIdx < recipe.IngredientIcons.Length) ? recipe.IngredientIcons[srcIdx] : null;
+            Item prefab = (recipe.IngredientPrefabs != null && srcIdx < recipe.IngredientPrefabs.Length) ? recipe.IngredientPrefabs[srcIdx] : null;
             BuildSlot(rowRt, x, icon, prefab, out var countText);
-            row.ingredientCounts[i] = countText;
+            row.ingredientCounts[u] = countText;
+            row.ingredientNeeded[u] = needCount[id];
             x += SlotSize + SlotGap;
         }
 
@@ -357,24 +384,16 @@ public class CraftingPanelUI : MonoBehaviour
             if (row.button != null) row.button.interactable = canCraft;
             if (row.buttonImage != null) row.buttonImage.color = canCraft ? buttonColor : buttonDisabledColor;
 
-            var ids = row.recipe.IngredientItemIds;
-            if (ids == null || row.ingredientCounts == null) continue;
-
-            var needed = new Dictionary<string, int>();
-            foreach (var id in ids)
+            if (row.uniqueIngredientIds == null || row.ingredientCounts == null || row.ingredientNeeded == null) continue;
+            for (int u = 0; u < row.uniqueIngredientIds.Length && u < row.ingredientCounts.Length; u++)
             {
-                if (string.IsNullOrEmpty(id)) continue;
-                if (needed.ContainsKey(id)) needed[id]++; else needed[id] = 1;
-            }
-            for (int i = 0; i < ids.Length && i < row.ingredientCounts.Length; i++)
-            {
-                string id = ids[i];
-                if (row.ingredientCounts[i] == null) continue;
-                if (string.IsNullOrEmpty(id)) { row.ingredientCounts[i].text = ""; continue; }
-                int totalNeeded = needed.ContainsKey(id) ? needed[id] : 1;
+                string id = row.uniqueIngredientIds[u];
+                if (row.ingredientCounts[u] == null) continue;
+                if (string.IsNullOrEmpty(id)) { row.ingredientCounts[u].text = ""; continue; }
+                int totalNeeded = row.ingredientNeeded[u];
                 int totalHave = inventory.CountItemsById(id);
-                row.ingredientCounts[i].text = $"{totalHave}/{totalNeeded}";
-                row.ingredientCounts[i].color = totalHave >= totalNeeded ? new Color(0.6f, 1f, 0.6f) : new Color(1f, 0.6f, 0.6f);
+                row.ingredientCounts[u].text = $"{totalHave}/{totalNeeded}";
+                row.ingredientCounts[u].color = totalHave >= totalNeeded ? new Color(0.6f, 1f, 0.6f) : new Color(1f, 0.6f, 0.6f);
             }
         }
     }
@@ -395,5 +414,7 @@ public class CraftingPanelUI : MonoBehaviour
         public Button button;
         public Image buttonImage;
         public Text[] ingredientCounts;
+        public string[] uniqueIngredientIds;
+        public int[] ingredientNeeded;
     }
 }

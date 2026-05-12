@@ -153,6 +153,6 @@ public class HeatGeneratorUI : MonoBehaviour
             }
         }
         if (energyText != null)
-            energyText.text = $"Энергия: {_currentGenerator.StoredEnergy:F0} / {_currentGenerator.MaxEnergy:F0}";
+            energyText.text = $"Energy: {_currentGenerator.StoredEnergy:F0} / {_currentGenerator.MaxEnergy:F0}";
     }
 }
