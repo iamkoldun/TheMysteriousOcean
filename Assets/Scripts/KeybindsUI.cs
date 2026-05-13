@@ -7,6 +7,7 @@ public class KeybindsUI : MonoBehaviour
     private GUIStyle actionStyle;
     private GUIStyle backgroundStyle;
     private bool stylesInitialized;
+    float multiplier = 2f;
 
     private readonly (string key, string action)[] keybinds = new[]
     {
@@ -26,7 +27,7 @@ public class KeybindsUI : MonoBehaviour
 
         headerStyle = new GUIStyle(GUI.skin.label)
         {
-            fontSize = 14,
+            fontSize = 14 * (int)multiplier,
             fontStyle = FontStyle.Bold,
             normal = { textColor = new Color(1f, 1f, 1f, 0.9f) },
             alignment = TextAnchor.MiddleCenter
@@ -34,7 +35,7 @@ public class KeybindsUI : MonoBehaviour
 
         keyStyle = new GUIStyle(GUI.skin.label)
         {
-            fontSize = 12,
+            fontSize = 12 * (int)multiplier,
             fontStyle = FontStyle.Bold,
             normal = { textColor = new Color(1f, 0.85f, 0.4f, 0.9f) },
             alignment = TextAnchor.MiddleRight
@@ -42,7 +43,7 @@ public class KeybindsUI : MonoBehaviour
 
         actionStyle = new GUIStyle(GUI.skin.label)
         {
-            fontSize = 12,
+            fontSize = 12 * (int)multiplier,
             normal = { textColor = new Color(1f, 1f, 1f, 0.75f) },
             alignment = TextAnchor.MiddleLeft
         };
@@ -59,10 +60,9 @@ public class KeybindsUI : MonoBehaviour
     void OnGUI()
     {
         InitStyles();
-
-        float panelWidth = 200f;
-        float lineHeight = 20f;
-        float headerHeight = 26f;
+        float panelWidth = 200f * multiplier;
+        float lineHeight = 20f * multiplier;
+        float headerHeight = 26f * multiplier;
         float padding = 8f;
         float panelHeight = headerHeight + keybinds.Length * lineHeight + padding * 2;
         float margin = 10f;
@@ -74,8 +74,8 @@ public class KeybindsUI : MonoBehaviour
         GUI.Label(new Rect(panelRect.x, y, panelWidth, headerHeight), "Controls", headerStyle);
         y += headerHeight;
 
-        float keyColWidth = 55f;
-        float gap = 6f;
+        float keyColWidth = 55f * multiplier;
+        float gap = 6f * multiplier;
 
         for (int i = 0; i < keybinds.Length; i++)
         {

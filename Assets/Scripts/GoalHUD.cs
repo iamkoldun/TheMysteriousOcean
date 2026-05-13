@@ -151,20 +151,20 @@ public class GoalHUD : MonoBehaviour
         switch (_phase)
         {
             case 0:
-                text = "Goal: Pick up a log";
+                text = "Goal: Pick up a red log";
                 break;
             case 1:
             {
                 int stored = _generator != null ? Mathf.RoundToInt(_generator.StoredEnergy) : 0;
                 int target = Mathf.RoundToInt(energyTarget);
-                text = $"Goal: Put the log into the generator. Energy stored {stored}/{target}";
+                text = $"Goal: Put the red log into the generator. Energy stored {stored}/{target}";
                 break;
             }
             case 2:
                 text = "Goal: Turn on the pump";
                 break;
             case 3:
-                text = "Goal: Disembark on an island";
+                text = "Goal: Explore the island";
                 break;
             case 4:
                 text = "Goal: Return to the boat";
