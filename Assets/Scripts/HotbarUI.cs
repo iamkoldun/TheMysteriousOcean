@@ -242,8 +242,8 @@ public class HotbarUI : MonoBehaviour
 
     private static string GetKeyLabelForDisplayIndex(int displayIndex)
     {
-        if (displayIndex == Inventory.RightHand) return "RMB";
-        if (displayIndex == Inventory.LeftHand) return "LMB";
+        if (displayIndex == Inventory.RightHand) return "";
+        if (displayIndex == Inventory.LeftHand) return "F";
         return (displayIndex - Inventory.HandSlotCount + 1).ToString();
     }
 
