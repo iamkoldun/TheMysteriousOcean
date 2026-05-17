@@ -7709,19 +7709,6 @@ MonoBehaviour:
   riseRatePerSecond: 0.2
   maxSinkDepth: 4
   startDelay: 10
---- !u!134 &1222445035
-PhysicsMaterial:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 2
-  m_DynamicFriction: 0.6
-  m_StaticFriction: 0.6
-  m_Bounciness: 0
-  m_FrictionCombine: 0
-  m_BounceCombine: 0
 --- !u!1 &1306627240
 GameObject:
   m_ObjectHideFlags: 0
@@ -8534,6 +8521,19 @@ PhysicsMaterial:
   m_Bounciness: 0
   m_FrictionCombine: 0
   m_BounceCombine: 0
+--- !u!134 &1737142329
+PhysicsMaterial:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ' (Instance)'
+  serializedVersion: 2
+  m_DynamicFriction: 0.6
+  m_StaticFriction: 0.6
+  m_Bounciness: 0
+  m_FrictionCombine: 0
+  m_BounceCombine: 0
 --- !u!1001 &1772748698
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8831,15 +8831,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4630176043928066, guid: 5511aed0eb5b6d349a114ae88ce1b543, type: 3}
       propertyPath: m_LocalScale.x
-      value: -0.59128714
+      value: 0.0005
       objectReference: {fileID: 0}
     - target: {fileID: 4630176043928066, guid: 5511aed0eb5b6d349a114ae88ce1b543, type: 3}
       propertyPath: m_LocalScale.y
-      value: -0.62877
+      value: 0.0005
       objectReference: {fileID: 0}
     - target: {fileID: 4630176043928066, guid: 5511aed0eb5b6d349a114ae88ce1b543, type: 3}
       propertyPath: m_LocalScale.z
-      value: -0.59128714
+      value: 0.0005
       objectReference: {fileID: 0}
     - target: {fileID: 4630176043928066, guid: 5511aed0eb5b6d349a114ae88ce1b543, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8882,13 +8882,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 23597665836826892, guid: 5511aed0eb5b6d349a114ae88ce1b543, type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23597665836826892, guid: 5511aed0eb5b6d349a114ae88ce1b543, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: f0608f160275440c0baf9d9a5c3ae555, type: 2}
+      objectReference: {fileID: 8856439643039456346, guid: 9cfa73cf246e549288d12b5006e57769, type: 3}
     - target: {fileID: 23597665836826892, guid: 5511aed0eb5b6d349a114ae88ce1b543, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: f0608f160275440c0baf9d9a5c3ae555, type: 2}
+    - target: {fileID: 33167446720143288, guid: 5511aed0eb5b6d349a114ae88ce1b543, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: -6117843686399738195, guid: 9cfa73cf246e549288d12b5006e57769, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9674,7 +9682,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2072485834}
-  m_Material: {fileID: 1222445035}
+  m_Material: {fileID: 1737142329}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -9686,8 +9694,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 6.250398, y: 3.0084777, z: 2.8459818}
-  m_Center: {x: -0.12071668, y: -1.2095857, z: -0.0000007748603}
+  m_Size: {x: 9914.82, y: 6873.21, z: 7359.47}
+  m_Center: {x: 57.09, y: 3436.6, z: -6.27}
 --- !u!1 &2074459949 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1030972148, guid: abc00000000004493057372343735476, type: 3}
