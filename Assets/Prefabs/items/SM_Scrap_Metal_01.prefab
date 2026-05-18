@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6637387920226555149}
   - component: {fileID: 8778169401146192915}
   - component: {fileID: 4581911092703616359}
+  - component: {fileID: 9027374516337467029}
   m_Layer: 0
   m_Name: SM_Scrap_Metal_01
   m_TagString: Untagged
@@ -105,9 +106,9 @@ MeshCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 5
-  m_Convex: 1
+  m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 2331002303896058374, guid: 675f9e2a8ff33444cbc498895b039dd3, type: 3}
 --- !u!114 &4581911092703616359
@@ -128,3 +129,24 @@ MonoBehaviour:
   size: 1
   snapPoint: {fileID: 0}
   icon: {fileID: 21300000, guid: 9ade3ce200b4b4ec59d58d2282a5ee88, type: 3}
+--- !u!65 &9027374516337467029
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5124042311839069400}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.45788962, y: 0.06996128, z: 0.34442455}
+  m_Center: {x: -0.024492085, y: 0.0296214, z: -0.012484938}
