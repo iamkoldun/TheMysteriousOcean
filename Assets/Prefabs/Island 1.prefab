@@ -2830,7 +2830,7 @@ MonoBehaviour:
     - {fileID: 113239210557073384, guid: 37d370948a8674b1e999222461e5ea01, type: 3}
     - {fileID: 7427065146463808274, guid: 85c85b5a0557d444e9d0551f4b35f860, type: 3}
     - {fileID: 5788968203525986472, guid: f8ccaa39b2ab7414796d8eaab4b7bb81, type: 3}
-    weight: 60
+    weight: 61
   - label: Rare
     prefabs:
     - {fileID: 1832585270870641546, guid: 0d1a63f5304d9184f940bb0308e5d919, type: 3}
@@ -2840,8 +2840,8 @@ MonoBehaviour:
     weight: 35
   - label: Epic
     prefabs:
-    - {fileID: 2687468530638008322, guid: b976af292fbd14e2b936cc0c95cdc30a, type: 3}
-    weight: 5
+    - {fileID: 4009329966984602733, guid: 0f2d5ce1d5cb3a741a65c988a7f1ed22, type: 3}
+    weight: 4
   guaranteedItems: []
   minItemCount: 10
   maxItemCount: 20

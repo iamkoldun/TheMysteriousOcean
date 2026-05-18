@@ -61,7 +61,7 @@ public class KeybindsUI : MonoBehaviour
         {
             fontSize = 13 * (int)multiplier,
             fontStyle = FontStyle.Bold,
-            normal = { textColor = new Color(1f, 0.85f, 0.4f, 0.9f) },
+            normal = { textColor = new Color(1f, 1f, 1f, 1f) },
             alignment = TextAnchor.MiddleRight
         };
 
