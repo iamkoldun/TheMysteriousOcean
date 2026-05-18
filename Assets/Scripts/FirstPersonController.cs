@@ -74,6 +74,8 @@ public class FirstPersonController : MonoBehaviour
     private void Update()
     {
         if (PauseMenuUI.IsPaused) return;
+        if (GameOverUI.Instance != null && GameOverUI.Instance.IsShown) return;
+        if (CraftingPanelUI.IsOpen) return;
 
         UpdateSwimmingState();
         HandleGroundCheck();
@@ -91,7 +93,7 @@ public class FirstPersonController : MonoBehaviour
         }
 
         // Lock cursor on click (not when inventory is open — inventory needs free cursor)
-        if (Input.GetMouseButtonDown(0) && Cursor.lockState == CursorLockMode.None && !InventoryScreenUI.IsOpen)
+        if (Input.GetMouseButtonDown(0) && Cursor.lockState == CursorLockMode.None && !InventoryScreenUI.IsOpen && !CraftingPanelUI.IsOpen)
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;

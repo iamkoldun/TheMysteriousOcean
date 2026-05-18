@@ -1,0 +1,4 @@
+Model: "Generator"
+Author: victorberdugo1 (Sketchfab)
+URL: https://sketchfab.com/3d-models/generator-b0de972e500a48d6a26a7d1ef6f5143f
+License: CC Attribution (CC BY 4.0)

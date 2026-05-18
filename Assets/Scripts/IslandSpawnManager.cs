@@ -27,7 +27,7 @@ public class IslandSpawnManager : MonoBehaviour
     [SerializeField] private List<IslandSpawnEntry> islandPrefabs = new List<IslandSpawnEntry>();
     [SerializeField] private List<Transform> spawnPoints = new List<Transform>();
     [FormerlySerializedAs("islandSpawnInterval")]
-    [SerializeField] private float islandSpawnDistance = 80f;
+    [SerializeField] private float islandSpawnDistance = 240f;
 
     [Header("Ocean")]
     [SerializeField] private GameObject oceanPrefab;
@@ -49,13 +49,15 @@ public class IslandSpawnManager : MonoBehaviour
     private float oceanTileLength;
     private float oceanTileWidth;
     private float distanceSinceLastIslandSpawn;
+    private float virtualDistanceTraveled;
     private bool worldInitialized;
+    private float boatAnchorInitialY;
 
     private void Reset()
     {
         moveDirection = Vector3.right;
         boatSpeed = 8f;
-        islandSpawnDistance = 80f;
+        islandSpawnDistance = 240f;
         oceanSpawnHeight = 3.81f;
         oceanTilesAhead = 2;
         oceanTilesBehind = 1;
@@ -135,6 +137,7 @@ public class IslandSpawnManager : MonoBehaviour
         }
 
         oceanOrigin = GetBoatWaterPosition();
+        boatAnchorInitialY = boatAnchor.position.y;
         distanceSinceLastIslandSpawn = 0f;
 
         EnsureOceanMetrics();
@@ -147,16 +150,19 @@ public class IslandSpawnManager : MonoBehaviour
     {
         if (boatAnchor == null)
         {
+            SpawnedWorldObject.GlobalWorldSpeed = 0f;
             return 0f;
         }
 
         if (stopBoatOnLeave && boatDeckAnchor != null && !boatDeckAnchor.HasPassengers)
         {
+            SpawnedWorldObject.GlobalWorldSpeed = 0f;
             return 0f;
         }
 
+        SpawnedWorldObject.GlobalWorldSpeed = boatSpeed;
         float distanceMoved = boatSpeed * Time.deltaTime;
-        boatAnchor.position += worldForward * distanceMoved;
+        virtualDistanceTraveled += distanceMoved;
         return distanceMoved;
     }
 
@@ -169,8 +175,14 @@ public class IslandSpawnManager : MonoBehaviour
             return;
         }
 
-        GameObject spawnedIsland = Instantiate(selectedPrefab, spawnPoint.position, spawnPoint.rotation, spawnedWorldParent);
+        Vector3 spawnPosition = spawnPoint.position + worldForward * virtualDistanceTraveled;
+        // Compensate for boat sinking so islands always spawn at their original water-level height,
+        // not at the (possibly sunk) current boat height.
+        if (boatAnchor != null)
+            spawnPosition.y += boatAnchorInitialY - boatAnchor.position.y;
+        GameObject spawnedIsland = Instantiate(selectedPrefab, spawnPosition, spawnPoint.rotation, spawnedWorldParent);
         SpawnedWorldObject worldObject = GetOrAddWorldObject(spawnedIsland);
+        worldObject.SetWorldMovement(-worldForward);
         spawnedIslands.Add(worldObject);
     }
 

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae8cf5f154e4d469d9f12f4151654b08, type: 3}
+  m_Name: Recipe_Board
+  m_EditorClassIdentifier:
+  recipeName: Board
+  ingredientItemIds:
+  - stick
+  - stick
+  - stick
+  ingredientIcons:
+  - {fileID: 21300000, guid: b739e6ae8b6e44eb481bbc24096ecb9d, type: 3}
+  - {fileID: 21300000, guid: b739e6ae8b6e44eb481bbc24096ecb9d, type: 3}
+  - {fileID: 21300000, guid: b739e6ae8b6e44eb481bbc24096ecb9d, type: 3}
+  ingredientPrefabs:
+  - {fileID: 7977608640880437728, guid: f8ccaa39b2ab7414796d8eaab4b7bb81, type: 3}
+  - {fileID: 7977608640880437728, guid: f8ccaa39b2ab7414796d8eaab4b7bb81, type: 3}
+  - {fileID: 7977608640880437728, guid: f8ccaa39b2ab7414796d8eaab4b7bb81, type: 3}
+  outputPrefab: {fileID: 3889610376680690127, guid: e59cb3c0308f45c4cac1274abf832b77, type: 3}
+  outputIcon: {fileID: 21300000, guid: 1d166a855fd3044cd8598bb3ca3915ce, type: 3}

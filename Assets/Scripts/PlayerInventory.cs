@@ -83,6 +83,8 @@ public class PlayerInventory : MonoBehaviour
 
     private void Update()
     {
+        if (CraftingPanelUI.IsOpen) return;
+
         HandleNumberKeys();
 
         if (Input.GetKeyDown(KeyCode.F))
@@ -148,7 +150,7 @@ public class PlayerInventory : MonoBehaviour
     {
         if (playerCamera == null) return;
         Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-        if (!Physics.Raycast(ray, out RaycastHit hit, pickupRange, pickupLayer))
+        if (!Physics.Raycast(ray, out RaycastHit hit, pickupRange, pickupLayer, QueryTriggerInteraction.Ignore))
             return;
 
         var heatGen = hit.collider.GetComponentInParent<HeatGenerator>();
@@ -169,6 +171,32 @@ public class PlayerInventory : MonoBehaviour
         {
             pump.Toggle();
             if (SoundManager.Instance != null) SoundManager.Instance.PlayPump();
+            return;
+        }
+
+        var workbench = hit.collider.GetComponentInParent<Workbench>();
+        if (workbench != null)
+        {
+            if (CraftingPanelUI.Instance != null)
+            {
+                CraftingPanelUI.Instance.Open(workbench);
+                if (SoundManager.Instance != null) SoundManager.Instance.PlayObject();
+            }
+            return;
+        }
+
+        var hole = hit.collider.GetComponentInParent<BoatHole>();
+        if (hole != null && !hole.IsPatched)
+        {
+            var rightItem = _inventory.GetRightHandItem();
+            if (rightItem != null && rightItem.GetComponent<Patch>() != null)
+            {
+                hole.Patch();
+                _inventory.RemoveItemFromDisplaySlot(Inventory.RightHand);
+                Destroy(rightItem.gameObject);
+                RefreshHeldItem();
+                if (SoundManager.Instance != null) SoundManager.Instance.PlayObject();
+            }
             return;
         }
 

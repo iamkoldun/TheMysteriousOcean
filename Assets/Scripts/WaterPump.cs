@@ -8,6 +8,7 @@ public class WaterPump : MonoBehaviour
     [SerializeField] private HeatGenerator generator;
     [SerializeField] private float energyConsumptionRate = 5f;
     [SerializeField] private ParticleSystem waterParticles;
+    [SerializeField] private BoatFlooding boatFlooding;
 
     private bool _isActive;
 
@@ -16,6 +17,7 @@ public class WaterPump : MonoBehaviour
     private void Awake()
     {
         if (generator == null) generator = FindFirstObjectByType<HeatGenerator>();
+        if (boatFlooding == null) boatFlooding = FindFirstObjectByType<BoatFlooding>();
         if (waterParticles == null)
         {
             var t = transform.Find("WaterParticles");
@@ -32,6 +34,7 @@ public class WaterPump : MonoBehaviour
 
     public void Toggle()
     {
+        if (!_isActive && (generator == null || generator.StoredEnergy <= 0f)) return;
         _isActive = !_isActive;
         if (!_isActive && waterParticles != null)
         {
@@ -55,6 +58,8 @@ public class WaterPump : MonoBehaviour
         }
 
         float consumed = generator.ConsumeEnergy(energyConsumptionRate * Time.deltaTime);
+        if (consumed > 0f && boatFlooding != null)
+            boatFlooding.DrainWater(boatFlooding.RiseRate * Time.deltaTime);
         if (waterParticles != null)
         {
             var emission = waterParticles.emission;

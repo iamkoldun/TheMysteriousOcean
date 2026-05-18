@@ -20,6 +20,7 @@ public class InventoryScreenUI : MonoBehaviour
     private void Update()
     {
         if (PauseMenuUI.IsPaused) return;
+        if (CraftingPanelUI.IsOpen) return;
 
         bool tabPressed = Input.GetKeyDown(KeyCode.Tab);
         bool escPressed = Input.GetKeyDown(KeyCode.Escape);

@@ -80,17 +80,37 @@ public class CrosshairUI : MonoBehaviour
                 var inv = player != null ? player.GetComponent<Inventory>() : null;
                 var rightItem = inv != null ? inv.GetRightHandItem() : null;
                 if (rightItem != null && rightItem.GetComponent<BurnableItem>() != null)
-                {
-                    promptText.text = "E — Положить в генератор";
-                    promptText.gameObject.SetActive(true);
-                    return;
-                }
+                    promptText.text = "E — Put into the generator";
+                else
+                    promptText.text = "Generator — put something burnable here";
+                promptText.gameObject.SetActive(true);
+                return;
+            }
+
+            var workbench = hit.collider.GetComponentInParent<Workbench>();
+            if (workbench != null)
+            {
+                promptText.text = "Workbench";
+                promptText.gameObject.SetActive(true);
+                return;
             }
 
             var pump = hit.collider.GetComponentInParent<WaterPump>();
             if (pump != null)
             {
-                promptText.text = pump.IsActive ? "E — Выключить помпу" : "E — Включить помпу";
+                promptText.text = pump.IsActive ? "E — Turn off the pump" : "E — Turn on the pump";
+                promptText.gameObject.SetActive(true);
+                return;
+            }
+
+            var hole = hit.collider.GetComponentInParent<BoatHole>();
+            if (hole != null && !hole.IsPatched)
+            {
+                var player = GameObject.FindWithTag("Player");
+                var inv = player != null ? player.GetComponent<Inventory>() : null;
+                var rightItem = inv != null ? inv.GetRightHandItem() : null;
+                bool hasPatch = rightItem != null && rightItem.GetComponent<Patch>() != null;
+                promptText.text = hasPatch ? "E — Patch the hole" : "You need Patch to fix this hole";
                 promptText.gameObject.SetActive(true);
                 return;
             }

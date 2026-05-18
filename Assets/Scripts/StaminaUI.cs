@@ -60,14 +60,19 @@ public class StaminaUI : MonoBehaviour
     private void Layout()
     {
         var rt = transform as RectTransform;
-        if (rt != null)
-        {
-            rt.anchorMin = new Vector2(0f, 0f);
-            rt.anchorMax = new Vector2(0f, 0f);
-            rt.pivot = new Vector2(0f, 0f);
-            rt.anchoredPosition = new Vector2(20f, 120f);
-            rt.sizeDelta = new Vector2(200f, 14f);
-        }
+        if (rt == null) return;
+
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.zero;
+        rt.pivot = Vector2.zero;
+
+        float yPos = 20f + 130f + 10f; // screenPadding + hotbarHeight + gap
+        var hotbar = GetComponentInParent<Canvas>()?.GetComponentInChildren<HotbarUI>();
+        if (hotbar != null)
+            yPos = hotbar.GetPanelTop() + 10f;
+
+        rt.anchoredPosition = new Vector2(20f, yPos);
+        rt.sizeDelta = new Vector2(200f, 14f);
     }
 
     private void LateUpdate()

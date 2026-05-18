@@ -9,7 +9,7 @@ public class Stamina : MonoBehaviour
     [Header("Stamina")]
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float drainPerSecond = 25f;
-    [SerializeField] private float regenPerSecond = 20f;
+    [SerializeField] private float regenPerSecond = 100f;
     [SerializeField] private float regenDelayAfterStop = 2f;
 
     private float _currentStamina;

@@ -8,12 +8,14 @@ public class Item : MonoBehaviour
 {
     public enum ItemSize { Light = 1, Heavy = 2 }
 
+    [SerializeField] private string itemId = "";
     [SerializeField] private string displayName = "Item";
     [SerializeField, TextArea(2, 5)] private string description = "";
     [SerializeField] private ItemSize size = ItemSize.Light;
     [SerializeField] private Transform snapPoint;
     [SerializeField] private Sprite icon;
 
+    public string ItemId => itemId;
     public string DisplayName => displayName;
     public string Description => description;
     public Sprite Icon => icon;
@@ -77,6 +79,20 @@ public class Item : MonoBehaviour
         transform.rotation = rotation;
         var col = GetComponent<Collider>();
         if (col != null) col.enabled = true;
+
+        if (Physics.Raycast(position + Vector3.up * 0.5f, Vector3.down, out RaycastHit hit, 20f))
+        {
+            SpawnedWorldObject platform = hit.collider.GetComponentInParent<SpawnedWorldObject>();
+            if (platform != null && platform.IsWorldMoving)
+            {
+                transform.SetParent(platform.transform);
+                transform.position = hit.point + Vector3.up * 0.2f;
+                if (_rb != null) _rb.isKinematic = true;
+                gameObject.SetActive(true);
+                return;
+            }
+        }
+
         if (_rb != null)
         {
             _rb.isKinematic = false;
